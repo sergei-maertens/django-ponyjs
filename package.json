@@ -32,5 +32,16 @@
   },
   "dependencies": {
     "jspm": "^0.16.0"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "ponyjs/static"
+    },
+    "dependencies": {},
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.22",
+      "babel-runtime": "npm:babel-runtime@^5.8.20",
+      "core-js": "npm:core-js@^1.1.0"
+    }
   }
 }
