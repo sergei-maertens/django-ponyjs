@@ -1,0 +1,33 @@
+{
+  "name": "django-ponyjs",
+  "version": "0.0.1",
+  "description": "A Django Javascript library",
+  "main": "''",
+  "scripts": {
+    "test": "grunt karma:dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergei-maertens/django-ponyjs.git"
+  },
+  "keywords": [
+    "Django",
+    "jspm",
+    "systemjs",
+    "es6"
+  ],
+  "author": "Sergei Maertens <sergei@modelbrouwers.nl>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sergei-maertens/django-ponyjs/issues"
+  },
+  "homepage": "https://github.com/sergei-maertens/django-ponyjs#readme",
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "grunt": "^0.4.5",
+    "grunt-blanket-mocha": "^0.5.0",
+    "load-grunt-tasks": "^3.2.0",
+    "sinon": "^1.16.1",
+    "sinon-chai": "^2.8.0"
+  }
+}

@@ -31,3 +31,6 @@ pip-log.txt
 env
 /.env
 docs/_build
+
+# front end
+/node_modules
