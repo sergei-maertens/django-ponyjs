@@ -66,3 +66,6 @@ Read the official jspm docs for more information.
     * Handlebars as template engine, although the plan is to make this optional/pluggable so your
       template library of choice can be used.
 
+
+
+Unit testing setup via https://sean.is/writing/client-side-testing-with-mocha-and-karma/
