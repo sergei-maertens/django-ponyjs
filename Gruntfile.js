@@ -31,18 +31,18 @@ module.exports = function(grunt) {
                     // In our case, the test and src files are the
                     // same for the dev and prod targets so we can include
                     // them in the global files option here
-                    'js/calculator.js',
-                    'test/calculator-test.js',
+                    'tests/foo.js',
+                    'tests/foo-test.js',
 
                     // html2js preprocessor takes this file and converts it
                     // to a string in our JS when the tests run.
-                    'test/index.html'
+                    'tests/index.html'
                 ]
             },
 
             dev: {
                 // On our local environment we want to test all the things!
-                browsers: ['Chrome', 'Firefox', 'PhantomJS']
+                browsers: ['Chrome', 'Firefox']//, 'PhantomJS']
             },
 
             // For production, that is to say, our CI environment, we'll
