@@ -18,7 +18,20 @@ module.exports = function(config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             'tests/*.html': ['html2js'],
-            'tests/*.js': ['coverage']
+            'tests/**/*.js': ['coverage', 'babel'],
+            'ponyjs/**/*.js': ['babel']
+        },
+
+        babelPreprocessor: {
+          options: {
+            sourceMap: 'inline'
+          },
+          filename: function (file) {
+            return file.originalPath.replace(/\.js$/, '.es5.js');
+          },
+          sourceFileName: function (file) {
+            return file.originalPath;
+          }
         },
 
         // test results reporter to use
