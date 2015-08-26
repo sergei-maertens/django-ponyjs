@@ -1,79 +1,70 @@
-module.exports = function(config) {
-    config.set({
-        // base path that will be used to resolve all patterns (e.g. files, exclude)
-        basePath: '',
+/* global module */
+module.exports = function (config) {
+	'use strict';
 
-        // frameworks to use
-        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['mocha'],
+	config.set({
+		autoWatch: true,
+		singleRun: true,
 
-        // list of files / patterns to load in the browser
-        files: [],
+		frameworks: ['jspm', 'mocha', 'sinon-chai'],
 
-        // list of files to exclude
-        exclude: [
-        ],
+		files: [
+			'node_modules/karma-babel-preprocessor/node_modules/babel-core/browser-polyfill.js'
+		],
 
-        // preprocess matching files before serving them to the browser
-        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: {
-            'tests/*.html': ['html2js'],
-            'tests/**/*.js': ['coverage', 'babel'],
-            'ponyjs/**/*.js': ['babel']
-        },
+		jspm: {
+			config: 'src/config.js',
+			loadFiles: [
+				'src/*.spec.js'
+			],
+			serveFiles: [
+				'src/!(*spec).js'
+			]
+		},
 
-        babelPreprocessor: {
-          options: {
-            sourceMap: 'inline'
-          },
-          filename: function (file) {
-            return file.originalPath.replace(/\.js$/, '.es5.js');
-          },
-          sourceFileName: function (file) {
-            return file.originalPath;
-          }
-        },
+		proxies: {
+			'/base': '/base/src'
+		},
 
-        // test results reporter to use
-        // possible values: 'dots', 'progress'
-        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'coverage'],
+		browsers: ['PhantomJS'],
 
-        // web server port
-        port: 9877,
+		preprocessors: {
+			'src/!(*spec).js': ['babel', 'sourcemap', 'coverage']
+		},
 
-        // enable / disable colors in the output (reporters and logs)
-        colors: true,
+		babelPreprocessor: {
+			options: {
+				sourceMap: 'inline',
+				blacklist: ['useStrict']
+			},
+			sourceFileName: function(file) {
+				return file.originalPath;
+			}
+		},
 
-        // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: true,
+		reporters: ['coverage', 'progress'],
 
-        // start these browsers
-        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: [],
+		coverageReporter: {
+			instrumenters: {isparta: require('isparta')},
+			instrumenter: {
+				'src/*.js': 'isparta'
+			},
 
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false,
+			reporters: [
+				{
+					type: 'text-summary',
+					subdir: normalizationBrowserName
+				},
+				{
+					type: 'html',
+					dir: 'coverage/',
+					subdir: normalizationBrowserName
+				}
+			]
+		}
+	});
 
-        // level of logging
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_INFO,
-
-        coverageReporter: {
-            dir: 'tests/coverage',
-            // Force the use of the Istanbul instrumenter to cover files
-            instrumenter: {
-                'tests/*.js': ['istanbul']
-            },
-            reporters: [
-                // reporters not supporting the `file` property
-                { type: 'html', subdir: 'report-html' },
-                { type: 'lcov', subdir: 'report-lcov' },
-                // reporters supporting the `file` property, use `subdir` to directly
-                // output them in the `dir` directory
-                { type: 'lcovonly', subdir: '.', file: 'report-lcovonly.txt' }
-            ]
-        }
-    });
+	function normalizationBrowserName(browser) {
+		return browser.toLowerCase().split(/[ /-]/)[0];
+	}
 };

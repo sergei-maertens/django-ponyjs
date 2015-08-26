@@ -36,4 +36,4 @@ docs/_build
 /node_modules
 jspm_packages
 
-tests/coverage
+coverage
