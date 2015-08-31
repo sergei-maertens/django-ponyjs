@@ -23,7 +23,8 @@ module.exports = function(grunt) {
             // run tests once in PhantomJS browser.
             prod: {
                 singleRun: true,
-                browsers: ['PhantomJS']
+                browsers: ['PhantomJS'],
+                reporters: ['coverage', 'progress', 'coveralls']
             }
         }
     });

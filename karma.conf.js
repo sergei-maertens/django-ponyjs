@@ -61,6 +61,10 @@ module.exports = function (config) {
 					type: 'html',
 					dir: 'coverage/',
 					subdir: normalizationBrowserName
+				},
+				{
+					type: 'lcov',
+					dir: 'coverage/'
 				}
 			]
 		}
