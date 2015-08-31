@@ -1,7 +1,13 @@
+/* global beforeEach, describe, expect, it */
 'use strict';
 
 // import Manager from 'ponyjs/models/manager';
 
+describe('Model Manager', () => {
+    it('should be pending', () => {
+        expect(true).to.equal(true);
+    });
+});
 
 // describe('Model Manager', () => {
 //     it('should initialize properly', () => {

@@ -13,23 +13,25 @@ module.exports = function (config) {
 		],
 
 		jspm: {
-			config: 'src/config.js',
+			configFile: 'ponyjs/static/config.js',
+			packages: 'ponyjs/static/jspm_packages',
 			loadFiles: [
-				'src/*.spec.js'
+				'tests/**/*.spec.js'
 			],
 			serveFiles: [
-				'src/!(*spec).js'
+				'ponyjs/static/ponyjs/**/*.js'
 			]
 		},
 
 		proxies: {
-			'/base': '/base/src'
+			'/base': '/base/ponyjs/static'
 		},
 
 		browsers: ['PhantomJS'],
 
 		preprocessors: {
-			'src/!(*spec).js': ['babel', 'sourcemap', 'coverage']
+			'tests/**/*.js': ['babel'],
+			'ponyjs/static/ponyjs/**/*.js': ['babel', 'sourcemap', 'coverage'],
 		},
 
 		babelPreprocessor: {
@@ -47,7 +49,7 @@ module.exports = function (config) {
 		coverageReporter: {
 			instrumenters: {isparta: require('isparta')},
 			instrumenter: {
-				'src/*.js': 'isparta'
+				'ponyjs/static/ponyjs/**/*.js': 'isparta'
 			},
 
 			reporters: [

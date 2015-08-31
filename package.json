@@ -46,7 +46,7 @@
   },
   "jspm": {
     "directories": {
-      "baseURL": "src"
+      "baseURL": "ponyjs/static"
     },
     "dependencies": {},
     "devDependencies": {
