@@ -48,7 +48,11 @@
     "directories": {
       "baseURL": "ponyjs/static"
     },
-    "dependencies": {},
+    "dependencies": {
+      "handlebars": "github:components/handlebars.js@^3.0.3",
+      "jquery": "github:components/jquery@^2.1.4",
+      "q": "npm:q@^2.0.3"
+    },
     "devDependencies": {
       "babel": "npm:babel-core@^5.1.13",
       "babel-runtime": "npm:babel-runtime@^5.1.13",
