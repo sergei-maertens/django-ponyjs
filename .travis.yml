@@ -5,7 +5,7 @@ node_js:
 
 before_script:
   - npm install coveralls
-  - jspm config endpoints.github.auth $gh-api-token
+  - jspm config endpoints.github.auth $GITHUBTOKEN
   - jspm install
 
 after_success:
