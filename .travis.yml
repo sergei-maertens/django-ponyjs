@@ -12,7 +12,7 @@ before_install:
   - npm install coveralls
 
 before_script:
-  - jspm config endpoints.github.auth $GITHUBTOKEN
+  - jspm config registries.github.auth $GITHUBTOKEN
   - jspm install
 
 after_success:
