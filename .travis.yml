@@ -4,6 +4,7 @@ node_js:
   - "0.12"
 
 before_script:
+  - npm install -g grunt karma
   - npm install coveralls
   - jspm config endpoints.github.auth $GITHUBTOKEN
   - jspm install
