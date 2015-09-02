@@ -1,5 +1,5 @@
 System.config({
-  "baseURL": "/",
+  "baseURL": "/ponyjs/static",
   "transpiler": "babel",
   "babelOptions": {
     "optional": [

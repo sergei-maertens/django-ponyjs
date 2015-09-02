@@ -11,6 +11,12 @@ Django PonyJS
 
 A Javascript framework for Django!
 
+Current status
+--------------
+Django PonyJS is under heavy development. This means that
+documentation is out of date more often than not, while we
+make and change design decisions.
+
 Installation
 ------------
 
