@@ -2,6 +2,7 @@
 
 import $ from 'jquery';
 import Manager from './manager';
+import { Field } from './fields/fields';
 
 
 class Options {
@@ -19,7 +20,7 @@ class Options {
 }
 
 
-class Model {
+class ModelBase {
   constructor(data) {
 
     // set the properties
@@ -39,7 +40,7 @@ class Model {
 }
 
 
-Object.defineProperty(Model, 'objects', {
+Object.defineProperty(ModelBase, 'objects', {
   get: function() {
     if (!this._default_manager) {
       console.debug('Initializing default mananager for model `' + this.name + '`');
@@ -49,7 +50,7 @@ Object.defineProperty(Model, 'objects', {
   }
 });
 
-Object.defineProperty(Model, '_meta', {
+Object.defineProperty(ModelBase, '_meta', {
   get: function() {
     if (!this.__meta) {
       console.debug('Initializing meta options for model `' + this.name + '`');
@@ -60,5 +61,47 @@ Object.defineProperty(Model, '_meta', {
 });
 
 
+// Factory to create models more declaritively-ish
+let Model = function(name, attrs) {
+  let fields = {},
+      meta = attrs.Meta || {},
+      managers = {};
+
+  meta.model_name = meta.model_name || name.toLowerCase();
+
+  for (key in attrs) {
+    let val = attrs[key];
+    if (val instanceof Field) {
+      fields[key] = val;
+    } else if (val instanceof Manager) {
+      managers[key] = val;
+    }
+  }
+
+  class _Model extends ModelBase {
+    static Meta() {
+      return meta;
+    }
+  };
+
+  _Model._meta.fields = fields;
+
+  for (name in managers) {
+    _Model[name] = managers[name];
+  }
+
+  // also run contribute to class
+  for (key in attrs) {
+    let val = attrs[key];
+    if (val.contribute_to_class) {
+      val.contribute_to_class(_Model);
+    }
+  }
+
+  // _Model.name = name; overriden by Babel
+  return _Model;
+};
+
+
 export default Model;
-export { Options };
+export { Model, ModelBase, Options };

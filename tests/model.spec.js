@@ -1,9 +1,10 @@
 /* global beforeEach, describe, expect, it.skip, sinon */
 'use strict';
 
-import Model from 'ponyjs/models/base';
+import { ModelBase, Model } from 'ponyjs/models/base';
 import { Options } from 'ponyjs/models/base';
 import Manager from 'ponyjs/models/manager';
+import { IntegerField, StringField, FloatField } from 'ponyjs/models/fields/fields';
 
 
 describe('Base model class', () => {
@@ -13,17 +14,17 @@ describe('Base model class', () => {
     // });
 
     afterEach(() => {
-        if (Model._default_manager) {
-            delete Model._default_manager;
+        if (ModelBase._default_manager) {
+            delete ModelBase._default_manager;
         }
-        if (Model._meat) {
-            delete Model.__meta;
+        if (ModelBase._meta) {
+            delete ModelBase.__meta;
         }
         // this.sinon.restore();
     });
 
     it('should have a _meta property', () => {
-        class MyModel extends Model {}
+        class MyModel extends ModelBase {}
         expect(MyModel._meta).to.be.instanceof(Options);
         expect(MyModel._meta.app_label).to.equal(null);
         expect(MyModel._meta.name).to.equal('MyModel');
@@ -31,7 +32,7 @@ describe('Base model class', () => {
     });
 
     it('should call Meta() on the real model class', () => {
-        class MyModel extends Model {
+        class MyModel extends ModelBase {
             static Meta() {
                 return {
                     app_label: 'tests',
@@ -47,11 +48,11 @@ describe('Base model class', () => {
     });
 
     it('should have a default manager called \'objects\'', () => {
-        expect(Model.objects).to.be.instanceof(Manager);
+        expect(ModelBase.objects).to.be.instanceof(Manager);
     });
 
     it('should have a lazy meta class', () => {
-        class MyModel extends Model {};
+        class MyModel extends ModelBase {};
         expect(MyModel.__meta).to.be.undefined;
         MyModel._meta;
         expect(MyModel.__meta).not.to.be.undefined;
@@ -59,15 +60,15 @@ describe('Base model class', () => {
     });
 
     it('should have a lazy default manager', () => {
-        expect(Model._default_manager).to.be.undefined;
-        Model.objects;
-        expect(Model._default_manager).not.to.be.undefined;
-        expect(Model.objects).to.be.equal(Model._default_manager);
+        expect(ModelBase._default_manager).to.be.undefined;
+        ModelBase.objects;
+        expect(ModelBase._default_manager).not.to.be.undefined;
+        expect(ModelBase.objects).to.be.equal(ModelBase._default_manager);
     });
 
     describe('Concrete model classes', () => {
         beforeEach(() => {
-            class MyModel extends Model {
+            class MyModel extends ModelBase {
                 static Meta() {
                     return {
                         app_label: 'tests',
@@ -100,4 +101,30 @@ describe('Base model class', () => {
         });
     });
 
+});
+
+
+describe('Model classes', () => {
+    it('should be able to be declaritively-ish defined ', () => {
+        class MyModel extends Model('MyModel', {
+            id: new IntegerField(),
+            name: new StringField(),
+            amount: new FloatField(),
+
+            private: new Manager(),
+
+            Meta: {
+                app_label: 'app',
+            }
+        }) {}
+
+        let fields = MyModel._meta.fields;
+        expect(fields.id).to.be.instanceof(IntegerField);
+        expect(fields.name).to.be.instanceof(StringField);
+        expect(fields.amount).to.be.instanceof(FloatField);
+
+        expect(MyModel.private).to.be.instanceof(Manager);
+        expect(MyModel._meta.model_name).to.equal('mymodel');
+        expect(MyModel._meta.app_label).to.equal('app');
+    })
 });

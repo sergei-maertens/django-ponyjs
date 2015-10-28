@@ -19,6 +19,10 @@ class Field {
             blank: false
         }
     }
+
+    contribute_to_class (cls) {
+        console.log(cls);
+    }
 }
 
 
