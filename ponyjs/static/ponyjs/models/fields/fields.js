@@ -20,8 +20,14 @@ class Field {
         }
     }
 
-    contribute_to_class (cls) {
-        console.log(cls);
+    contribute_to_class (cls, name) {
+        this.name = name;
+
+        Object.defineProperty(cls.prototype, name, {
+            get: function() {
+                return this[name];
+            }
+        });
     }
 }
 

@@ -94,7 +94,7 @@ let Model = function(name, attrs) {
   for (key in attrs) {
     let val = attrs[key];
     if (val.contribute_to_class) {
-      val.contribute_to_class(_Model);
+      val.contribute_to_class(_Model, key);
     }
   }
 
