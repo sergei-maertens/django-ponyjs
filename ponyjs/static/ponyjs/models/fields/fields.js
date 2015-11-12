@@ -6,6 +6,7 @@ import $ from 'jquery';
 class Field {
     constructor (name, options) {
         this.type = null;
+        this.model = null;
         this.verbose_name = name;
         let defaults = this.constructor.defaults();
         options = $.extend(true, defaults, options || {});
@@ -21,13 +22,8 @@ class Field {
     }
 
     contribute_to_class (cls, name) {
+        this.model = cls;
         this.name = name;
-
-        Object.defineProperty(cls.prototype, name, {
-            get: function() {
-                return this[name];
-            }
-        });
     }
 }
 

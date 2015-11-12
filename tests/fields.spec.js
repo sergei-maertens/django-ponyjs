@@ -30,20 +30,41 @@ describe('Base model fields', () => {
         strField.contribute_to_class.restore();
     });
 
-    it('should have setters and getters on the instances', () => {
+    it('should have setters and getters on the instances for relations');
+
+    it('should be able to set new values', () => {
         let DummyModel = Model('DummyModel', {
-            value: new IntegerField()
+            id: new IntegerField()
         });
 
         let instance = new DummyModel();
-        // debugger;
+        instance.id = 3;
+        expect(instance.id).to.equal(3);
     });
 
-    it('should be able to set new values');
+    it('should mark the model instance dirty if a field changes', () => {
+        let DummyModel = Model('DummyModel', {
+            id: new IntegerField()
+        });
 
-    it('should mark the model instance dirty');
+        let instance = new DummyModel();
+        expect(instance._state.dirty).to.equal(false);
+        instance.id = 3;
+        expect(instance._state.dirty).to.equal(true);
+    });
 
-    it('should not mark the model instance dirty if the original value was set');
+    it('should not mark the model instance dirty if the original value was set', () => {
+        let DummyModel = Model('DummyModel', {
+            id: new IntegerField()
+        });
+
+        let instance = new DummyModel({id: 3});
+        expect(instance._state.dirty).to.equal(false);
+        instance.id = 3;
+        expect(instance._state.dirty).to.equal(false);
+        instance.id = 5;
+        expect(instance._state.dirty).to.equal(true);
+    });
 });
 
 
@@ -60,7 +81,5 @@ describe('String fields', () => {
     it('should have a String type property', () => {
         expect(StringField.type).to.be.equal(String);
     });
-
-    it('should typecast non-string values');
 
 });

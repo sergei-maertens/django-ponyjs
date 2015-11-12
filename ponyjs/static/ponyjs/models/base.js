@@ -20,11 +20,36 @@ class Options {
 }
 
 
+class ModelState {
+  constructor(instance, data) {
+    this.instance = instance;
+    this.original_values = $.extend(true, {}, data);
+  }
+}
+
+
+Object.defineProperty(ModelState.prototype, 'dirty', {
+  get: function() {
+    let instance = this.instance;
+
+    for (let fieldName in instance.constructor._meta.fields) {
+      if ( this.original_values[key] != instance[key] ) {
+        return true;
+      }
+    }
+    return false;
+  }
+});
+
+
 class ModelBase {
   constructor(data) {
 
+    // set up the instance state
+    this._state = new ModelState(this, data);
+
     // set the properties
-    for (var key in data) {
+    for (let key in data) {
       this[key] = data[key];
     }
   }
