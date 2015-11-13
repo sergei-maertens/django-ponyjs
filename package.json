@@ -34,7 +34,7 @@
     "karma-babel-preprocessor": "^5.2.1",
     "karma-coverage": "douglasduteil/karma-coverage#next",
     "karma-coveralls": "^1.1.2",
-    "karma-jspm": "^1.1.5",
+    "karma-jspm": "^2.0.2",
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
     "karma-sinon-chai": "^1.0.0",

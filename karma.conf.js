@@ -9,7 +9,7 @@ module.exports = function (config) {
 		frameworks: ['jspm', 'mocha', 'sinon-chai'],
 
 		files: [
-			'node_modules/babel-core/browser-polyfill.js'
+			// 'node_modules/babel-core/browser-polyfill.js'
 		],
 
 		jspm: {
