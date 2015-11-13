@@ -47,20 +47,20 @@
     "sinon-chai": "^2.8.0"
   },
   "jspm": {
+    "registry": "jspm",
+    "format": "es6",
     "directories": {
       "baseURL": "ponyjs/static"
     },
-    "configFile": "ponyjs/static/config.js",
     "dependencies": {
       "handlebars": "github:components/handlebars.js@^3.0.3",
-      "jquery": "github:components/jquery@^2.1.4"
+      "jquery": "github:components/jquery@^2.1.4",
+      "rest": "github:cujojs/rest@^1.3.1"
     },
     "devDependencies": {
-      "babel": "npm:babel-core@^5.1.13",
-      "babel-runtime": "npm:babel-runtime@^5.1.13",
-      "core-js": "npm:core-js@^0.9.4"
-    },
-    "format": "es6",
-    "registry": "jspm"
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
   }
 }
