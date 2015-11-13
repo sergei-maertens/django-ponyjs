@@ -20,7 +20,7 @@ class QuerySet {
 
     _getList (params) {
         let endpoint = this.model._meta.endpoints.list;
-        let client = this.client ||
+        let client = this.client || null; // TODO
     }
 
     all() {
