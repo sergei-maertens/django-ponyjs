@@ -13,6 +13,18 @@ class Options {
     }
   }
 
+  setDefaultEndpoints() {
+    this.endpoints = {
+      list: `${this.model_name}/`,
+      detail: `${this.model_name}/:id/`,
+    };
+    if (this.app_label) {
+      for (let key in this.endpoints) {
+        this.endpoints[key] = `${this.app_label}/${this.endpoints[key]}`;
+      }
+    }
+  }
+
   // merge new endpoints with existing
   setEndpoints(endpoints) {
     this.endpoints = $.extend(true, this.endpoints, endpoints);
@@ -110,6 +122,7 @@ let Model = function(name, attrs) {
   };
 
   _Model._meta.fields = fields;
+  _Model._meta.setDefaultEndpoints();
 
   for (name in managers) {
     _Model[name] = managers[name];
