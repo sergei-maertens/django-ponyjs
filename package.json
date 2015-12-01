@@ -53,7 +53,7 @@
     "format": "es6",
     "directories": {
       "baseURL": "ponyjs/static",
-      "lib": "ponyjs/static"
+      "lib": "ponyjs/static/ponyjs"
     },
     "dependencies": {
       "handlebars": "github:components/handlebars.js@^3.0.3",
