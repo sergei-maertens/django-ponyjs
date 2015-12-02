@@ -1,2 +1,2 @@
-export { Model } from 'models/base.js';
-export Manager from 'models/manager.js';
+export { Model } from './models/base.js';
+export { Manager } from './models/manager.js';

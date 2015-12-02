@@ -1,7 +1,7 @@
 'use strict';
 
 
-import { ApiClient, defaultClient } from 'ponyjs/api/client.js';
+import { defaultClient, getClient } from '../api/client.js';
 
 
 class QuerySet {
@@ -9,7 +9,7 @@ class QuerySet {
     constructor (modelClass) {
         this.model = modelClass;
         this.filters = {};
-        this.client = null;
+        this.client = defaultClient;
     }
 
     __copy() {
@@ -19,20 +19,16 @@ class QuerySet {
         return copy;
     }
 
-    using(client) {
-        this.client = client;
+    using(alias) {
+        this.client = getClient(alias);
         return this; // chainable
     }
 
     _getList (params) {
         let endpoint = this.model._meta.endpoints.list;
-        let _client;
-        if (this.client) {
-            _client = ApiClient.create(this.client);
-        } else {
-            _client = defaultClient;
-        }
-        return _client.get({}); // TODO...
+        return this.client.get(endpoint).then(response => {
+            debugger;
+        }); // TODO...
     }
 
     all() {

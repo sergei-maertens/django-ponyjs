@@ -56,14 +56,16 @@
       "lib": "ponyjs/static/ponyjs"
     },
     "dependencies": {
+      "aurelia-http-client": "npm:aurelia-http-client@^1.0.0-beta.1",
+      "core-js": "npm:core-js@^1.2.6",
       "handlebars": "github:components/handlebars.js@^3.0.3",
       "jquery": "github:components/jquery@^2.1.4",
-      "purest": "npm:purest@^2.0.0"
+      "json": "github:systemjs/plugin-json@^0.1.0"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
       "babel-runtime": "npm:babel-runtime@^5.8.24",
-      "core-js": "npm:core-js@^1.1.4"
+      "core-js": "npm:core-js@^1.2.6"
     }
   }
 }

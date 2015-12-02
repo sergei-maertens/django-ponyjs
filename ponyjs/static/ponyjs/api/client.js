@@ -1,36 +1,56 @@
 'use strict';
 
-import { ApiClient } from 'api-client';
+import url from 'url';
 
+import { HttpClient } from 'aurelia-http-client';
+
+import apiConf from 'conf/api.json!';
+
+
+let clientPool = {};
+
+let supportedTokens = [
+    'version',
+];
 
 /**
- * Rest API client that backs the model manager methods.
- * Uses NodeJS api-client library.
+ * Factory that takes a key from apiConf and applies that endpoint
+ * configuration.
  */
+let clientFactory = function(alias='default') {
+    let localConf = apiConf[alias];
+    if (localConf === undefined) {
+        throw new Error(`Alias ${alias} is missing in conf/api.json`);
+    }
 
-// provide this base config with node-config
-// https://github.com/lorenwest/node-config
-let config = {
-    endpoints: {
-        default: {
-            type: 'VersionedApiClient', // default
-            host: 'localhost',
-            port: 8000,
-            options: {
-                protocol: 'http',
-                base_path: '/api',
-                version: 'v1',
-                username: null, // for http basic auth
-                password: null,
-            }
+    let baseUrl = localConf.baseUrl;
+    let basePath = localConf.basePath;
+
+    for (let i=0; i<supportedTokens.length; i++) {
+        let token = supportedTokens[i];
+        if (localConf.options[token] !== undefined) {
+            basePath = basePath.replace(`[${token}]`, localConf.options[token]);
         }
     }
-};
+
+    baseUrl = url.resolve(baseUrl, basePath);
+    let client = new HttpClient().configure(x => {
+        x.withBaseUrl(baseUrl);
+        x.withHeader('Content-Type', 'application/json');
+    });
+
+    clientPool[alias] = client;
+    return client;
+}
 
 
-ApiClient.load(config);
-let defaultClient = ApiClient.create('default');
+let getClient = function(alias) {
+    return clientPool[alias] || clientFactory(alias);
+}
 
 
-export default ApiClient;
-export { ApiClient, defaultClient };
+let defaultClient = getClient('default');
+
+
+export default defaultClient;
+export { defaultClient, getClient };
