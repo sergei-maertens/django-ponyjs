@@ -19,16 +19,21 @@ class QuerySet {
         return copy;
     }
 
-    using(alias) {
-        this.client = getClient(alias);
+    using(alias=null) {
+        if (alias !== null) {
+            this.client = getClient(alias);
+        }
         return this; // chainable
     }
 
     _getList (params) {
         let endpoint = this.model._meta.endpoints.list;
-        return this.client.get(endpoint).then(response => {
-            debugger;
-        }); // TODO...
+        let request = this.client.get(endpoint);
+        return request.then(response => {
+            let rawObjects = response.content;
+            let objs = rawObjects.map(raw => new this.model(raw));
+            return objs;
+        });
     }
 
     all() {
@@ -40,9 +45,9 @@ class QuerySet {
             if (this.filters[key] !== undefined) {
                 console.warn(`overwriting filter '{$key}'`);
             }
-            this.filter[key] = params[key];
+            this.filters[key] = params[key];
         }
-        return this._getList;
+        return this._getList(this.filters);
     }
 
 }

@@ -3,8 +3,11 @@
 import url from 'url';
 
 import { HttpClient } from 'aurelia-http-client';
+import { initialize } from 'aurelia-pal-browser';
 
 import apiConf from 'conf/api.json!';
+
+initialize();
 
 
 let clientPool = {};

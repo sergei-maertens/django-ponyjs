@@ -13,16 +13,19 @@ class Options {
     }
   }
 
-  setDefaultEndpoints() {
-    this.endpoints = {
+  setDefaultEndpoints(endpoints={}) {
+    let defaults = {
       list: `${this.model_name}/`,
       detail: `${this.model_name}/:id/`,
     };
+
     if (this.app_label) {
-      for (let key in this.endpoints) {
-        this.endpoints[key] = `${this.app_label}/${this.endpoints[key]}`;
+      for (let key in defaults) {
+        defaults[key] = `${this.app_label}/${defaults[key]}`;
       }
     }
+
+    this.endpoints = $.extend(true, defaults, endpoints);
   }
 
   // merge new endpoints with existing
@@ -106,7 +109,7 @@ let Model = function(name, attrs) {
 
   meta.model_name = meta.model_name || name.toLowerCase();
 
-  for (key in attrs) {
+  for (let key in attrs) {
     let val = attrs[key];
     if (val instanceof Field) {
       fields[key] = val;
@@ -122,14 +125,14 @@ let Model = function(name, attrs) {
   };
 
   _Model._meta.fields = fields;
-  _Model._meta.setDefaultEndpoints();
+  _Model._meta.setDefaultEndpoints(meta.endpoints);
 
   for (name in managers) {
     _Model[name] = managers[name];
   }
 
   // also run contribute to class
-  for (key in attrs) {
+  for (let key in attrs) {
     let val = attrs[key];
     if (val.contribute_to_class) {
       val.contribute_to_class(_Model, key);
