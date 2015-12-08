@@ -83,7 +83,6 @@ class ModelBase {
 Object.defineProperty(ModelBase, 'objects', {
   get: function() {
     if (!this._default_manager) {
-      console.debug('Initializing default mananager for model `' + this.name + '`');
       this._default_manager = new Manager(this);
     }
     return this._default_manager;
@@ -93,7 +92,6 @@ Object.defineProperty(ModelBase, 'objects', {
 Object.defineProperty(ModelBase, '_meta', {
   get: function() {
     if (!this.__meta) {
-      console.debug('Initializing meta options for model `' + this.name + '`');
       this.__meta = new Options(this.Meta());
     }
     return this.__meta;
