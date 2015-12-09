@@ -34,7 +34,7 @@ class QuerySet {
 
     _getList (params) {
         let endpoint = this.model._meta.endpoints.list;
-        let request = this.client.get(endpoint, params);
+        let request = this.client.createRequest(endpoint).asGet().withParams(params).send();
         return request.then(response => {
             let objs;
             if (typeof response.content == 'object') {
