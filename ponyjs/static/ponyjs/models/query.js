@@ -15,6 +15,7 @@ class QuerySet {
         this.model = modelClass;
         this.filters = {};
         this.client = defaultClient;
+        this._result_cache = [];
     }
 
     __copy() {
@@ -35,15 +36,16 @@ class QuerySet {
         let endpoint = this.model._meta.endpoints.list;
         let request = this.client.get(endpoint, params);
         return request.then(response => {
+            let objs;
             if (typeof response.content == 'object') {
                 let paginator = new Paginator(this.model);
-                let objs = paginator.paginated(response.content);
-                return objs;
+                objs = paginator.paginated(response.content);
             } else {
                 let rawObjects = response.content;
-                let objs = rawObjects.map(raw => new this.model(raw));
-                return objs;
+                objs = rawObjects.map(raw => new this.model(raw));
             }
+            this._result_cache.concat(objs);
+            return objs;
         });
     }
 
