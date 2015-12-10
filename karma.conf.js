@@ -6,34 +6,35 @@ module.exports = function (config) {
 		autoWatch: true,
 		singleRun: true,
 
-		frameworks: ['jspm', 'mocha', 'sinon-chai'],
+		frameworks: ['jspm', 'mocha', 'sinon-chai', 'es5-shim'],
 
 		files: [
 			// 'node_modules/babel-core/browser-polyfill.js'
 		],
 
 		jspm: {
-			configFile: 'ponyjs/static/config.js',
-			packages: 'ponyjs/static/jspm_packages',
+			configFile: 'src/config.js',
+			packages: 'src/jspm_packages',
 			loadFiles: [
 				'tests/**/*.spec.js'
 			],
 			serveFiles: [
-				'ponyjs/static/ponyjs/**/*.js'
+				'src/**/*.js',
+				'src/conf/**/*.json',
 			]
 		},
 
 		proxies: {
-			'/base/conf': '/base/ponyjs/static/conf',
-			'/base/ponyjs': '/base/ponyjs/static/ponyjs',
-			'/base/jspm_packages': '/base/ponyjs/static/jspm_packages',
+			'/base/conf': '/base/src/conf',
+			'/base/ponyjs': '/base/src/ponyjs',
+			'/base/jspm_packages': '/base/src/jspm_packages'
 		},
 
 		browsers: ['PhantomJS'],
 
 		preprocessors: {
 			'tests/**/*.js': ['babel'],
-			'ponyjs/static/ponyjs/**/*.js': ['babel', 'sourcemap', 'coverage'],
+			'src/ponyjs/**/*.js': ['babel', 'sourcemap', 'coverage'],
 		},
 
 		babelPreprocessor: {
@@ -52,7 +53,7 @@ module.exports = function (config) {
 			includeAllSources : true,
 			instrumenters: {isparta: require('isparta')},
 			instrumenter: {
-				'ponyjs/static/ponyjs/**/*.js': 'isparta'
+				'src/ponyjs/**/*.js': 'isparta'
 			},
 
 			reporters: [

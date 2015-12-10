@@ -35,6 +35,7 @@
     "karma-babel-preprocessor": "^5.2.1",
     "karma-coverage": "^0.5.3",
     "karma-coveralls": "^1.1.2",
+    "karma-es5-shim": "0.0.4",
     "karma-jspm": "^2.0.2",
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
@@ -52,8 +53,8 @@
     "registry": "jspm",
     "format": "es6",
     "directories": {
-      "baseURL": "ponyjs/static",
-      "lib": "ponyjs/static/ponyjs"
+      "baseURL": "src",
+      "lib": "src/ponyjs"
     },
     "dependencies": {
       "aurelia-http-client": "npm:aurelia-http-client@^1.0.0-beta.1",
