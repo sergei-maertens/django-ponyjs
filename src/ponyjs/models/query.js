@@ -1,5 +1,6 @@
 'use strict';
 
+import $ from 'jquery';
 
 import { defaultClient, getClient } from '../api/client.js';
 import Paginator from './paginator.js';
@@ -20,7 +21,7 @@ class QuerySet {
 
     __copy() {
         let copy = new this.constructor(this.model);
-        copy.filters = this.filters;
+        copy.filters = $.extend(true, {}, this.filters);
         copy.client = this.client;
         return copy;
     }
