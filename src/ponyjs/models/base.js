@@ -48,7 +48,7 @@ Object.defineProperty(ModelState.prototype, 'dirty', {
     let instance = this.instance;
 
     for (let fieldName in instance.constructor._meta.fields) {
-      if ( this.original_values[key] != instance[key] ) {
+      if ( this.original_values[fieldName] != instance[fieldName] ) {
         return true;
       }
     }
