@@ -2,7 +2,7 @@
   "name": "django-ponyjs",
   "version": "0.0.1",
   "description": "A Django Javascript library",
-  "main": "ponyjs/models/base.js",
+  "main": "ponyjs/models.js",
   "scripts": {
     "test": "grunt karma:prod"
   },
@@ -31,9 +31,9 @@
     "isparta": "^3.0.3",
     "istanbul": "gotwarlost/istanbul.git#source-map",
     "jspm": "^0.16.14",
-    "karma": "^0.13.9",
+    "karma": "^0.13.15",
     "karma-babel-preprocessor": "^5.2.1",
-    "karma-coverage": "douglasduteil/karma-coverage#next",
+    "karma-coverage": "^0.5.3",
     "karma-coveralls": "^1.1.2",
     "karma-jspm": "^2.0.2",
     "karma-mocha": "^0.2.0",
@@ -57,10 +57,12 @@
     },
     "dependencies": {
       "aurelia-http-client": "npm:aurelia-http-client@^1.0.0-beta.1",
+      "aurelia-pal-browser": "npm:aurelia-pal-browser@^1.0.0-beta.1",
       "core-js": "npm:core-js@^1.2.6",
       "handlebars": "github:components/handlebars.js@^3.0.3",
       "jquery": "github:components/jquery@^2.1.4",
-      "json": "github:systemjs/plugin-json@^0.1.0"
+      "json": "github:systemjs/plugin-json@^0.1.0",
+      "url": "github:jspm/nodelibs-url@^0.1.0"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",

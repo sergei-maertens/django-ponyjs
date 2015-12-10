@@ -24,7 +24,9 @@ module.exports = function (config) {
 		},
 
 		proxies: {
-			'/base': '/base/ponyjs/static'
+			'/base/conf': '/base/ponyjs/static/conf',
+			'/base/ponyjs': '/base/ponyjs/static/ponyjs',
+			'/base/jspm_packages': '/base/ponyjs/static/jspm_packages',
 		},
 
 		browsers: ['PhantomJS'],
@@ -47,6 +49,7 @@ module.exports = function (config) {
 		reporters: ['coverage', 'progress'],
 
 		coverageReporter: {
+			includeAllSources : true,
 			instrumenters: {isparta: require('isparta')},
 			instrumenter: {
 				'ponyjs/static/ponyjs/**/*.js': 'isparta'
