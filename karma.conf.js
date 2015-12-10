@@ -4,9 +4,10 @@ module.exports = function (config) {
 
 	config.set({
 		autoWatch: true,
-		singleRun: true,
+		// singleRun: true,
+		singleRun: false,
 
-		frameworks: ['jspm', 'mocha', 'sinon-chai', 'es5-shim', 'es6-shim'],
+		frameworks: ['jspm', 'mocha', 'chai-sinon', 'es5-shim', 'es6-shim'],
 
 		files: [
 			// 'node_modules/babel-core/browser-polyfill.js'
@@ -40,7 +41,8 @@ module.exports = function (config) {
 		babelPreprocessor: {
 			options: {
 				sourceMap: 'inline',
-				blacklist: ['useStrict']
+				blacklist: ['useStrict'],
+				// modules: 'system',
 			},
 			sourceFileName: function(file) {
 				return file.originalPath;
