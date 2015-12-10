@@ -13,6 +13,21 @@ class Options {
     }
   }
 
+  setDefaultEndpoints(endpoints={}) {
+    let defaults = {
+      list: `${this.model_name}/`,
+      detail: `${this.model_name}/:id/`,
+    };
+
+    if (this.app_label) {
+      for (let key in defaults) {
+        defaults[key] = `${this.app_label}/${defaults[key]}`;
+      }
+    }
+
+    this.endpoints = $.extend(true, defaults, endpoints);
+  }
+
   // merge new endpoints with existing
   setEndpoints(endpoints) {
     this.endpoints = $.extend(true, this.endpoints, endpoints);
@@ -33,7 +48,7 @@ Object.defineProperty(ModelState.prototype, 'dirty', {
     let instance = this.instance;
 
     for (let fieldName in instance.constructor._meta.fields) {
-      if ( this.original_values[key] != instance[key] ) {
+      if ( this.original_values[fieldName] != instance[fieldName] ) {
         return true;
       }
     }
@@ -68,7 +83,6 @@ class ModelBase {
 Object.defineProperty(ModelBase, 'objects', {
   get: function() {
     if (!this._default_manager) {
-      console.debug('Initializing default mananager for model `' + this.name + '`');
       this._default_manager = new Manager(this);
     }
     return this._default_manager;
@@ -78,7 +92,6 @@ Object.defineProperty(ModelBase, 'objects', {
 Object.defineProperty(ModelBase, '_meta', {
   get: function() {
     if (!this.__meta) {
-      console.debug('Initializing meta options for model `' + this.name + '`');
       this.__meta = new Options(this.Meta());
     }
     return this.__meta;
@@ -94,7 +107,7 @@ let Model = function(name, attrs) {
 
   meta.model_name = meta.model_name || name.toLowerCase();
 
-  for (key in attrs) {
+  for (let key in attrs) {
     let val = attrs[key];
     if (val instanceof Field) {
       fields[key] = val;
@@ -110,13 +123,14 @@ let Model = function(name, attrs) {
   };
 
   _Model._meta.fields = fields;
+  _Model._meta.setDefaultEndpoints(meta.endpoints);
 
   for (name in managers) {
     _Model[name] = managers[name];
   }
 
   // also run contribute to class
-  for (key in attrs) {
+  for (let key in attrs) {
     let val = attrs[key];
     if (val.contribute_to_class) {
       val.contribute_to_class(_Model, key);

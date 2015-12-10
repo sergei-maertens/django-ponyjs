@@ -4,40 +4,45 @@ module.exports = function (config) {
 
 	config.set({
 		autoWatch: true,
-		singleRun: true,
+		// singleRun: true,
+		singleRun: false,
 
-		frameworks: ['jspm', 'mocha', 'sinon-chai'],
+		frameworks: ['jspm', 'mocha', 'chai-sinon', 'es5-shim', 'es6-shim'],
 
 		files: [
-			'node_modules/karma-babel-preprocessor/node_modules/babel-core/browser-polyfill.js'
+			// 'node_modules/babel-core/browser-polyfill.js'
 		],
 
 		jspm: {
-			configFile: 'ponyjs/static/config.js',
-			packages: 'ponyjs/static/jspm_packages',
+			configFile: 'src/config.js',
+			packages: 'src/jspm_packages',
 			loadFiles: [
 				'tests/**/*.spec.js'
 			],
 			serveFiles: [
-				'ponyjs/static/ponyjs/**/*.js'
+				'src/**/*.js',
+				'src/conf/**/*.json',
 			]
 		},
 
 		proxies: {
-			'/base': '/base/ponyjs/static'
+			'/base/conf': '/base/src/conf',
+			'/base/ponyjs': '/base/src/ponyjs',
+			'/base/jspm_packages': '/base/src/jspm_packages'
 		},
 
 		browsers: ['PhantomJS'],
 
 		preprocessors: {
 			'tests/**/*.js': ['babel'],
-			'ponyjs/static/ponyjs/**/*.js': ['babel', 'sourcemap', 'coverage'],
+			'src/ponyjs/**/*.js': ['babel', 'sourcemap', 'coverage'],
 		},
 
 		babelPreprocessor: {
 			options: {
 				sourceMap: 'inline',
-				blacklist: ['useStrict']
+				blacklist: ['useStrict'],
+				// modules: 'system',
 			},
 			sourceFileName: function(file) {
 				return file.originalPath;
@@ -47,9 +52,10 @@ module.exports = function (config) {
 		reporters: ['coverage', 'progress'],
 
 		coverageReporter: {
+			includeAllSources : true,
 			instrumenters: {isparta: require('isparta')},
 			instrumenter: {
-				'ponyjs/static/ponyjs/**/*.js': 'isparta'
+				'src/ponyjs/**/*.js': 'isparta'
 			},
 
 			reporters: [
