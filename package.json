@@ -1,6 +1,6 @@
 {
   "name": "django-ponyjs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Django Javascript library",
   "main": "ponyjs/models.js",
   "scripts": {
