@@ -1,10 +1,10 @@
 {
   "name": "django-ponyjs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Django Javascript library",
-  "main": "''",
+  "main": "ponyjs/models.js",
   "scripts": {
-    "test": "grunt karma:dev"
+    "test": "grunt karma:prod"
   },
   "repository": {
     "type": "git",
@@ -24,40 +24,52 @@
   "homepage": "https://github.com/sergei-maertens/django-ponyjs#readme",
   "devDependencies": {
     "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
     "grunt": "^0.4.5",
-    "grunt-blanket-mocha": "^0.5.0",
     "grunt-karma": "^0.12.0",
-    "karma": "^0.13.9",
+    "grunt-karma-coveralls": "^2.5.4",
+    "isparta": "^3.0.3",
+    "istanbul": "gotwarlost/istanbul.git#source-map",
+    "jspm": "^0.16.14",
+    "karma": "^0.13.15",
     "karma-babel-preprocessor": "^5.2.1",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^0.2.0",
-    "karma-coverage": "^0.5.0",
-    "karma-firefox-launcher": "^0.1.6",
-    "karma-html2js-preprocessor": "^0.1.0",
+    "karma-chai-sinon": "^0.1.5",
+    "karma-coverage": "^0.5.3",
+    "karma-coveralls": "^1.1.2",
+    "karma-es5-shim": "0.0.4",
+    "karma-es6-shim": "^0.2.0",
+    "karma-jspm": "^2.0.2",
     "karma-mocha": "^0.2.0",
-    "karma-phantomjs-launcher": "^0.2.1",
-    "karma-sinon": "^1.0.4",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-sourcemap-loader": "^0.3.5",
     "load-grunt-tasks": "^3.2.0",
     "mocha": "^2.2.5",
+    "phantomjs": "^1.9.17",
+    "phantomjs-polyfill": "0.0.1",
     "sinon": "^1.16.1",
+    "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0"
   },
-  "dependencies": {
-    "jspm": "^0.16.0"
-  },
   "jspm": {
+    "registry": "jspm",
+    "format": "es6",
     "directories": {
-      "baseURL": "ponyjs/static"
+      "baseURL": "src",
+      "lib": "src/ponyjs"
     },
     "dependencies": {
-      "handlebars": "npm:handlebars@^3.0.3",
+      "aurelia-http-client": "npm:aurelia-http-client@^1.0.0-beta.1",
+      "aurelia-pal-browser": "npm:aurelia-pal-browser@^1.0.0-beta.1",
+      "core-js": "npm:core-js@^1.2.6",
+      "handlebars": "github:components/handlebars.js@^3.0.3",
       "jquery": "github:components/jquery@^2.1.4",
-      "q": "npm:q@^1.4.1"
+      "json": "github:systemjs/plugin-json@^0.1.0",
+      "url": "github:jspm/nodelibs-url@^0.1.0"
     },
     "devDependencies": {
-      "babel": "npm:babel-core@^5.8.22",
-      "babel-runtime": "npm:babel-runtime@^5.8.20",
-      "core-js": "npm:core-js@^1.1.0"
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.2.6"
     }
   }
 }

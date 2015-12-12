@@ -1,79 +1,82 @@
-module.exports = function(config) {
-    config.set({
-        // base path that will be used to resolve all patterns (e.g. files, exclude)
-        basePath: '',
+/* global module */
+module.exports = function (config) {
+	'use strict';
 
-        // frameworks to use
-        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['mocha'],
+	config.set({
+		autoWatch: true,
+		// singleRun: true,
+		singleRun: false,
 
-        // list of files / patterns to load in the browser
-        files: [],
+		frameworks: ['jspm', 'mocha', 'chai-sinon', 'es5-shim', 'es6-shim'],
 
-        // list of files to exclude
-        exclude: [
-        ],
+		files: [
+			// 'node_modules/babel-core/browser-polyfill.js'
+		],
 
-        // preprocess matching files before serving them to the browser
-        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: {
-            'tests/*.html': ['html2js'],
-            'tests/**/*.js': ['coverage', 'babel'],
-            'ponyjs/**/*.js': ['babel']
-        },
+		jspm: {
+			configFile: 'src/config.js',
+			packages: 'src/jspm_packages',
+			loadFiles: [
+				'tests/**/*.spec.js'
+			],
+			serveFiles: [
+				'src/**/*.js',
+				'src/conf/**/*.json',
+			]
+		},
 
-        babelPreprocessor: {
-          options: {
-            sourceMap: 'inline'
-          },
-          filename: function (file) {
-            return file.originalPath.replace(/\.js$/, '.es5.js');
-          },
-          sourceFileName: function (file) {
-            return file.originalPath;
-          }
-        },
+		proxies: {
+			'/base/conf': '/base/src/conf',
+			'/base/ponyjs': '/base/src/ponyjs',
+			'/base/jspm_packages': '/base/src/jspm_packages'
+		},
 
-        // test results reporter to use
-        // possible values: 'dots', 'progress'
-        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'coverage'],
+		browsers: ['PhantomJS'],
 
-        // web server port
-        port: 9877,
+		preprocessors: {
+			'tests/**/*.js': ['babel'],
+			'src/ponyjs/**/*.js': ['babel', 'sourcemap', 'coverage'],
+		},
 
-        // enable / disable colors in the output (reporters and logs)
-        colors: true,
+		babelPreprocessor: {
+			options: {
+				sourceMap: 'inline',
+				blacklist: ['useStrict'],
+				// modules: 'system',
+			},
+			sourceFileName: function(file) {
+				return file.originalPath;
+			}
+		},
 
-        // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: true,
+		reporters: ['coverage', 'progress'],
 
-        // start these browsers
-        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: [],
+		coverageReporter: {
+			includeAllSources : true,
+			instrumenters: {isparta: require('isparta')},
+			instrumenter: {
+				'src/ponyjs/**/*.js': 'isparta'
+			},
 
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false,
+			reporters: [
+				{
+					type: 'text-summary',
+					subdir: normalizationBrowserName
+				},
+				{
+					type: 'html',
+					dir: 'coverage/',
+					subdir: normalizationBrowserName
+				},
+				{
+					type: 'lcov',
+					dir: 'coverage/'
+				}
+			]
+		}
+	});
 
-        // level of logging
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_INFO,
-
-        coverageReporter: {
-            dir: 'tests/coverage',
-            // Force the use of the Istanbul instrumenter to cover files
-            instrumenter: {
-                'tests/*.js': ['istanbul']
-            },
-            reporters: [
-                // reporters not supporting the `file` property
-                { type: 'html', subdir: 'report-html' },
-                { type: 'lcov', subdir: 'report-lcov' },
-                // reporters supporting the `file` property, use `subdir` to directly
-                // output them in the `dir` directory
-                { type: 'lcovonly', subdir: '.', file: 'report-lcovonly.txt' }
-            ]
-        }
-    });
+	function normalizationBrowserName(browser) {
+		return browser.toLowerCase().split(/[ /-]/)[0];
+	}
 };
