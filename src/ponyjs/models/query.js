@@ -38,12 +38,13 @@ class QuerySet {
         let request = this.client.createRequest(endpoint).asGet().withParams(params).send();
         return request.then(response => {
             let objs;
-            if (typeof response.content == 'object') {
-                let paginator = new Paginator(this.model);
-                objs = paginator.paginated(response.content);
-            } else {
+            // it's a list, not an object containing pagination information
+            if (Object.prototype.toString.call( response.content ) === '[object Array]') {
                 let rawObjects = response.content;
                 objs = rawObjects.map(raw => new this.model(raw));
+            } else {
+                let paginator = new Paginator(this.model);
+                objs = paginator.paginated(response.content);
             }
             this._result_cache.concat(objs);
             return objs;

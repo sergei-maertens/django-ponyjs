@@ -29,10 +29,40 @@ describe('Model Manager queries', () => {
 
 describe('QuerySets', () => {
 
-    it('should make api calls', () => {
+    let server = null;
+
+    beforeEach(() => {
+        server = sinon.fakeServer.create();
+        server.autoRespond = true;
+        server.xhr.useFilters = true;
+
+        server.xhr.addFilter(function (method, uri) {
+            let matched = uri.startsWith('http://example.com');
+            // Sinon FakeXHR filters need to return `false` if the request should be stubbed and
+            // `true` if it should be allowed to pass through.
+            return !matched;
+        });
+    });
+
+    afterEach(() => {
+        server.restore();
+    });
+
+
+    it('should make api calls', (done) => {
         let pizza = new Pizza({'id': 1});
-        let promise = Pizza.objects.all().then();
-        return promise.should.eventually.equal([pizza]);
+        var okResponse = [
+            200,
+            { 'Content-type': 'application/json' },
+            '[{"id":1}]'
+        ];
+        server.respondWith('GET', 'http://example.com/api/v1/pizza/', okResponse);
+        return Pizza.objects.all().should
+            .eventually.be.an.instanceof(Array)
+            .and.satisfy((objList) => {
+                return (objList.length == 1 && pizza._equals(objList[0]));
+            })
+            .notify(done);
     });
 
 })
