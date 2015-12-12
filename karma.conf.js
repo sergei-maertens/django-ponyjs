@@ -7,7 +7,7 @@ module.exports = function (config) {
 		// singleRun: true,
 		singleRun: false,
 
-		frameworks: ['jspm', 'mocha', 'chai-sinon', 'es5-shim', 'es6-shim'],
+		frameworks: ['jspm', 'mocha', 'chai-sinon', 'chai-as-promised', 'chai', 'es5-shim', 'es6-shim'],
 
 		files: [
 			// 'node_modules/babel-core/browser-polyfill.js'
