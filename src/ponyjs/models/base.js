@@ -77,6 +77,18 @@ class ModelBase {
       endpoints: {}
     };
   }
+
+  _equals(other) {
+    for (let key in this) {
+      if (key.startsWith('_')) {
+        continue;
+      }
+      if (this[key] != other[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 
@@ -100,7 +112,7 @@ Object.defineProperty(ModelBase, '_meta', {
 
 
 // Factory to create models more declaritively-ish
-let Model = function(name, attrs) {
+let Model = function(name, attrs={}) {
   let fields = {},
       meta = attrs.Meta || {},
       managers = {};

@@ -1,8 +1,6 @@
 'use strict';
 
 import QuerySet from './query.js';
-// import Q from 'q';
-// import Paginator from 'scripts/paginator';
 
 
 class Manager {
@@ -26,3 +24,4 @@ class Manager {
 }
 
 export default Manager;
+export { Manager };

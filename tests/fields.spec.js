@@ -30,6 +30,7 @@ describe('Base model fields', () => {
         strField.contribute_to_class.restore();
     });
 
+    // TODO
     it('should have setters and getters on the instances for relations');
 
     it('should be able to set new values', () => {

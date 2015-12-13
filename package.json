@@ -33,6 +33,8 @@
     "jspm": "^0.16.14",
     "karma": "^0.13.15",
     "karma-babel-preprocessor": "^5.2.1",
+    "karma-chai": "^0.1.0",
+    "karma-chai-as-promised": "^0.1.2",
     "karma-chai-sinon": "^0.1.5",
     "karma-coverage": "^0.5.3",
     "karma-coveralls": "^1.1.2",
