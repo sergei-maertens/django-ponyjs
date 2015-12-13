@@ -112,7 +112,7 @@ Object.defineProperty(ModelBase, '_meta', {
 
 
 // Factory to create models more declaritively-ish
-let Model = function(name, attrs) {
+let Model = function(name, attrs={}) {
   let fields = {},
       meta = attrs.Meta || {},
       managers = {};

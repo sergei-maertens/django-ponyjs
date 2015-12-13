@@ -40,7 +40,7 @@ class Page {
     }
 
     previousPageNumber() {
-        let nr = this.paginator.page_range[this.number-1];
+        let nr = this.paginator.page_range[this.number-2];
         if (nr !== undefined) {
             return nr;
         }
@@ -90,7 +90,7 @@ class Paginator {
 
     page(page_nr) {
         let i = this.page_range.indexOf(page_nr);
-        if (i === undefined) {
+        if (i === -1) {
             throw new InvalidPage(`page number ${page_nr} does not exist`);
         }
         // TODO: figure out which pages belong to which object list
@@ -100,3 +100,4 @@ class Paginator {
 
 
 export default Paginator;
+export { Page, Paginator, InvalidPage, EmptyPage };
