@@ -26,7 +26,7 @@ should come with ``nodejs`` itself.
 
     apt-get install nodejs
 
-or for other operating systems::
+or for other operating systems:
 
 .. code-block:: bash
 
