@@ -14,6 +14,10 @@ Welcome to Django PonyJS's documentation!
 .. image:: https://coveralls.io/repos/sergei-maertens/django-ponyjs/badge.svg?branch=master&service=github
     :target: https://coveralls.io/github/sergei-maertens/django-ponyjs?branch=master
 
+.. image:: https://readthedocs.org/projects/django-ponyjs/badge/?version=latest
+    :target: http://django-ponyjs.readthedocs.org/en/latest/?badge=latest
+    :alt: Documentation Status
+
 
 Intended usage/public
 ---------------------

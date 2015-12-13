@@ -10,6 +10,12 @@ A Javascript framework for Django!
 .. image:: https://coveralls.io/repos/sergei-maertens/django-ponyjs/badge.svg?branch=develop&service=github
     :target: https://coveralls.io/github/sergei-maertens/django-ponyjs?branch=develop
 
+
+.. image:: https://readthedocs.org/projects/django-ponyjs/badge/?version=latest
+    :target: http://django-ponyjs.readthedocs.org/en/latest/?badge=latest
+    :alt: Documentation Status
+
+
 Current status
 --------------
 Django PonyJS is under heavy development. This means that
