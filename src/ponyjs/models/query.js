@@ -6,6 +6,10 @@ import { defaultClient, getClient } from '../api/client.js';
 import Paginator from './paginator.js';
 
 
+class MultipleObjectsReturned extends Error {}
+class DoesNotExist extends Error {}
+
+
 class QuerySet {
     /**
      * Idea to make filter(...) calls chainable: return the `this` object,
@@ -55,7 +59,6 @@ class QuerySet {
         return this.__copy();
     }
 
-    /* TODO: chainable */
     filter(params) {
         for (let key in params) {
             if (this.filters[key] !== undefined) {
@@ -74,6 +77,37 @@ class QuerySet {
     // overridden to make calls chainable
     then(callback) {
         return this._getList(this.filters).then(callback);
+    }
+
+    _getDetail (params) {
+        // params === undefined means we're querying the list and expecting a single object
+        // so, return a promise for the _getList and post-process that response
+        if (params === undefined) {
+            return this._getList().then(objs => {
+                if (objs.length > 1) {
+                    throw MultipleObjectsReturned('Found ${objs.length} objects, expected 1.');
+                }
+                if (objs.length < 1) {
+                    throw DoesNotExist('No object found.');
+                }
+                return objs[0];
+            });
+        }
+
+        // TODO: make this smarter
+        let endpoint = this.model._meta.endpoints.detail;
+        for(let key in params) {
+            let bit = `/:${key}/`;
+            endpoint = endpoint.replace(bit, `/${params[key]}/`);
+        }
+        let request = this.client.createRequest(endpoint).asGet().withParams(params).send();
+        return request.then(response => {
+            return new this.model(response.content);
+        });
+    }
+
+    get(params) {
+        return this._getDetail(params);
     }
 
 }

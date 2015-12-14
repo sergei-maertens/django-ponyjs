@@ -39,3 +39,24 @@ describe('Model Manager queries', () => {
     });
 
 });
+
+
+describe('Queryset.get', () => {
+
+    it('should return a promise', () => {
+        // no params, falls back to list
+        let promise = Pizza.objects.all().get();
+        expect(promise).to.be.instanceof(Promise);
+        // we expect a 404 here because the server isn't running
+        return promise.should.eventually.throw;
+    });
+
+
+    it('should return a promise (2)', () => {
+        let promise = Pizza.objects.all().get({id: 1});
+        expect(promise).to.be.instanceof(Promise);
+        // we expect a 404 here because the server isn't running
+        return promise.should.eventually.throw;
+    });
+
+});
