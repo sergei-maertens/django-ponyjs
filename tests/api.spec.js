@@ -65,4 +65,18 @@ describe('QuerySets', () => {
             .notify(done);
     });
 
+
+    it('should construct proper querystrings', () => {
+        let pizza = new Pizza({'id': 6});
+        let qs = Pizza.objects.filter({id__lte: 10, id__gte: 5});
+        var okResponse = [
+            200,
+            {'Content-type': 'application/json'},
+            '[{"id":6}]'
+        ];
+        server.respondWith('GET', 'http://example.com/api/v1/pizza/?id__gte=5&id__lte=10', okResponse);
+        return qs.should.eventually.satisfy((objList) => {
+            return (objList.length ==1 && pizza._equals(objList[0]));
+        });
+    });
 })

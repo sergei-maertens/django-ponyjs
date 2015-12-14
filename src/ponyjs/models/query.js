@@ -59,9 +59,14 @@ class QuerySet {
     filter(params) {
         for (let key in params) {
             if (this.filters[key] !== undefined) {
-                console.warn(`overwriting filter '{$key}'`);
+                // append, convert to list if necessary
+                if (!Array.isArray(this.filters[key])) {
+                    this.filters[key] = [this.filters[key]];
+                }
+                this.filters[key].push(params[key]);
+            } else {
+                this.filters[key] = params[key];
             }
-            this.filters[key] = params[key];
         }
         return this.__copy();
     }

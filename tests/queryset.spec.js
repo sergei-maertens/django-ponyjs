@@ -20,10 +20,22 @@ describe('Model Manager queries', () => {
 
     it('should be chainable', () => {
         let qs = Pizza.objects.all();
-        qs2 = qs.filter({foo: 'bar'});
+        let qs2 = qs.filter({foo: 'bar'});
+        let qs3 = qs2.filter({foo2: 'baz'});
 
         expect(qs2).to.be.an.instanceof(QuerySet);
         expect(qs2.filters).to.not.equal(qs.filters);
+        expect(qs3.filters).to.deep.equal({
+            foo: 'bar',
+            foo2: 'baz'
+        });
+    });
+
+    it('should not overwrite existing keys, but append', () => {
+        let qs = Pizza.objects.filter({foo: 'bar'}).filter({foo: 'baz'});
+        expect(qs.filters).to.deep.equal({
+            foo: ['bar', 'baz']
+        });
     });
 
 });
