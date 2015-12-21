@@ -7,17 +7,21 @@ class Manager {
   constructor(modelClass, using) {
 
     this.model = modelClass;
-    this.using = using || null; // option to specify a different api client
+    this._using = using || null; // option to specify a different api client
 
   }
 
+  using(alias=null) {
+    return new QuerySet(this.model).using(alias);
+  }
+
   all() {
-    let qs = new QuerySet(this.model).using(this.using);
+    let qs = new QuerySet(this.model).using(this._using);
     return qs.all();
   }
 
   filter(params) {
-    let qs = new QuerySet(this.model).using(this.using);
+    let qs = new QuerySet(this.model).using(this._using);
     return qs.filter(params);
   }
 

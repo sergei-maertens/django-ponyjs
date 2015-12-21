@@ -27,12 +27,14 @@ let clientFactory = function(alias='default') {
     }
 
     let baseUrl = localConf.baseUrl;
-    let basePath = localConf.basePath;
+    let basePath = localConf.basePath || '/';
 
-    for (let i=0; i<supportedTokens.length; i++) {
-        let token = supportedTokens[i];
-        if (localConf.options[token] !== undefined) {
-            basePath = basePath.replace(`[${token}]`, localConf.options[token]);
+    if (localConf.options) {
+        for (let i=0; i<supportedTokens.length; i++) {
+            let token = supportedTokens[i];
+            if (localConf.options[token] !== undefined) {
+                basePath = basePath.replace(`[${token}]`, localConf.options[token]);
+            }
         }
     }
 
