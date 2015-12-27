@@ -125,4 +125,20 @@ describe('QuerySets', () => {
         server.respondWith('GET', 'http://example.com/api/v1/pizza/?id=1', okResponse);
         return qs.get().should.eventually.satisfy(obj => pizza._equals(obj));
     });
+
+    it('should fetch details from get with params', () => {
+        let _pizza = {'id': 1, name: 'pepperoni'};
+        let pizza = new Pizza(_pizza);
+        var okResponse = generateResponse(_pizza);
+        server.respondWith('GET', 'http://example.com/api/v1/pizza/1/', okResponse);
+        return Pizza.objects.get({id: 1}).should.eventually.satisfy(obj => pizza._equals(obj));
+    });
+
+    it('should fetch details from get with params and querystrings', () => {
+        let _pizza = {'id': 1, name: 'pepperoni'};
+        let pizza = new Pizza(_pizza);
+        var okResponse = generateResponse(_pizza);
+        server.respondWith('GET', 'http://example.com/api/v1/pizza/1/?foo=bar', okResponse);
+        return Pizza.objects.get({id: 1, foo: 'bar'}).should.eventually.satisfy(obj => pizza._equals(obj));
+    });
 });

@@ -27,6 +27,11 @@ class Manager {
     return qs.filter(params);
   }
 
+  get(params) {
+    let qs = new QuerySet(this.model).using(this._using);
+    return qs.get(params);
+  }
+
 }
 
 export default Manager;

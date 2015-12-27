@@ -98,7 +98,10 @@ class QuerySet {
         let endpoint = this.model._meta.endpoints.detail;
         for(let key in params) {
             let bit = `/:${key}/`;
-            endpoint = endpoint.replace(bit, `/${params[key]}/`);
+            if (endpoint.includes(bit)) {
+                endpoint = endpoint.replace(bit, `/${params[key]}/`);
+                delete params[key];
+            }
         }
         let request = this.client.createRequest(endpoint).asGet().withParams(params).send();
         return request.then(response => {
