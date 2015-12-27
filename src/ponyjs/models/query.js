@@ -83,7 +83,7 @@ class QuerySet {
         // params === undefined means we're querying the list and expecting a single object
         // so, return a promise for the _getList and post-process that response
         if (params === undefined) {
-            return this._getList().then(objs => {
+            return this._getList(this.filters).then(objs => {
                 if (objs.length > 1) {
                     throw MultipleObjectsReturned('Found ${objs.length} objects, expected 1.');
                 }

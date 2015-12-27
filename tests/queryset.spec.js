@@ -38,6 +38,14 @@ describe('Model Manager queries', () => {
         });
     });
 
+    it('should not overwrite existing keys, but append, even if it\'s already an array', () => {
+        let qs = Pizza.objects.filter({foo: ['bar', 'baz']});
+        qs.filter({foo: 'baw'});
+        expect(qs.filters).to.deep.equal({
+            foo: ['bar', 'baz', 'baw']
+        });
+    });
+
 });
 
 

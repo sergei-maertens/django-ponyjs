@@ -75,7 +75,6 @@ describe('QuerySets', () => {
             });
     });
 
-
     it('should construct proper querystrings', () => {
         let pizza = new Pizza({'id': 6});
         let qs = Pizza.objects.filter({id__lte: 10, id__gte: 5});
@@ -118,4 +117,12 @@ describe('QuerySets', () => {
                 ;
             }).and.have.property('paginator');
     });
-})
+
+    it('should fetch details from lists', () => {
+        let pizza = new Pizza({'id': 1});
+        var okResponse = generateResponse([{id: 1}]);
+        let qs = Pizza.objects.filter({id: 1});
+        server.respondWith('GET', 'http://example.com/api/v1/pizza/?id=1', okResponse);
+        return qs.get().should.eventually.satisfy(obj => pizza._equals(obj));
+    });
+});
