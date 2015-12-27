@@ -70,7 +70,7 @@ describe('QuerySets', () => {
         server.respondWith('GET', 'http://example.com/api/v1/pizza/', okResponse);
         return Pizza.objects.all().should
             .eventually.be.an.instanceof(Array)
-            .and.satisfy((objList) => {
+            .and.satisfy(objList => {
                 return (objList.length == 1 && pizza._equals(objList[0]));
             });
     });
@@ -81,7 +81,7 @@ describe('QuerySets', () => {
         let qs = Pizza.objects.filter({id__lte: 10, id__gte: 5});
         var okResponse = generateResponse([{id: 6}]);
         server.respondWith('GET', 'http://example.com/api/v1/pizza/?id__gte=5&id__lte=10', okResponse);
-        return qs.should.eventually.satisfy((objList) => {
+        return qs.should.eventually.satisfy(objList => {
             return (objList.length ==1 && pizza._equals(objList[0]));
         });
     });
@@ -101,5 +101,21 @@ describe('QuerySets', () => {
         let qs = Pizza2.objects.all();
         server.respondWith('GET', 'http://api.external.com/pizza2/', generateResponse([]));
         return qs.should.eventually.deep.equal([]);
+    });
+
+    it('should paginate responses automatically', () => {
+        let qs = Pizza.objects.all();
+        server.respondWith('GET', 'http://example.com/api/v1/pizza/', generateResponse({
+            paginate_by: 2,
+            results: [{id: 1}, {id: 2}],
+            count: 3
+        }));
+        let [pizza1, pizza2] = [ new Pizza({id: 1}), new Pizza({id: 2}) ];
+        return qs.should.eventually.satisfy(objList => {
+                return objList.length == 2 &&
+                       pizza1._equals(objList[0]) &&
+                       pizza2._equals(objList[1])
+                ;
+            }).and.have.property('paginator');
     });
 })
