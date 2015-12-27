@@ -34,6 +34,11 @@ describe('Model Manager queries', () => {
         expect(qs.then).to.be.a('function');
     });
 
+    it('should throw for undefined API aliases', () => {
+        expect(
+            () => Pizza.objects.using('i-do-definitely-not-exist').all()
+        ).to.throw('Alias i-do-definitely-not-exist is missing in conf/api.json');
+    });
 });
 
 
@@ -82,7 +87,7 @@ describe('QuerySets', () => {
     });
 
     it('should be possible to select a different API', () => {
-        let qs = Pizza.objects.using('external');
+        let qs = Pizza.objects.using('simple');
         server.respondWith('GET', 'http://api.external.com/pizza/', generateResponse([]));
         return qs.should.eventually.deep.equal([]);
     });
