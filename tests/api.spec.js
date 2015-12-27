@@ -2,6 +2,7 @@
 'use strict';
 
 import { Model } from 'ponyjs/models/base';
+import { Manager } from 'ponyjs/models/manager';
 import QuerySet from 'ponyjs/models/query';
 import { IntegerField } from 'ponyjs/models/fields/fields';
 
@@ -83,6 +84,17 @@ describe('QuerySets', () => {
     it('should be possible to select a different API', () => {
         let qs = Pizza.objects.using('external');
         server.respondWith('GET', 'http://api.external.com/pizza/', generateResponse([]));
+        return qs.should.eventually.deep.equal([]);
+    });
+
+    it('should be possible to select a different API on model definition', () => {
+        let Pizza2 = Model('Pizza2', {
+            id: new IntegerField(),
+            objects: new Manager('external'),
+        });
+        expect(Pizza2.objects._using).to.equal('external');
+        let qs = Pizza2.objects.all();
+        server.respondWith('GET', 'http://api.external.com/pizza2/', generateResponse([]));
         return qs.should.eventually.deep.equal([]);
     });
 })

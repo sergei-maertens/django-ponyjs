@@ -4,11 +4,13 @@ import QuerySet from './query.js';
 
 
 class Manager {
-  constructor(modelClass, using) {
-
-    this.model = modelClass;
+  constructor(using) {
+    this.model = null;
     this._using = using || null; // option to specify a different api client
+  }
 
+  contribute_to_class(modelClass, key) {
+    this.model = modelClass;
   }
 
   using(alias=null) {

@@ -40,11 +40,8 @@ class ModelState {
     this.instance = instance;
     this.original_values = $.extend(true, {}, data);
   }
-}
 
-
-Object.defineProperty(ModelState.prototype, 'dirty', {
-  get: function() {
+  get dirty() {
     let instance = this.instance;
 
     for (let fieldName in instance.constructor._meta.fields) {
@@ -53,8 +50,9 @@ Object.defineProperty(ModelState.prototype, 'dirty', {
       }
     }
     return false;
+
   }
-});
+}
 
 
 class ModelBase {
@@ -89,26 +87,27 @@ class ModelBase {
     }
     return true;
   }
-}
 
-
-Object.defineProperty(ModelBase, 'objects', {
-  get: function() {
-    if (!this._default_manager) {
-      this._default_manager = new Manager(this);
-    }
-    return this._default_manager;
-  }
-});
-
-Object.defineProperty(ModelBase, '_meta', {
-  get: function() {
+  static get _meta() {
     if (!this.__meta) {
       this.__meta = new Options(this.Meta());
     }
     return this.__meta;
   }
-});
+
+  static get objects() {
+    if (!this._default_manager) {
+      this._default_manager = new Manager();
+      this._default_manager.model = this;
+    }
+    return this._default_manager;
+  }
+
+  // required in case the default manager is being overwritten
+  static set objects(value) {
+    this._default_manager = value;
+  }
+}
 
 
 // Factory to create models more declaritively-ish
