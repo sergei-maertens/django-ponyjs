@@ -14,7 +14,7 @@ Pagination
 ++++++++++
 
 PonyJS automagically tries to detect if a response is paginated or not - if it's
-a Javascript Object (curly braces) that get returned from GET ``list`` calls, it
+a Javascript Object (curly braces) that's returned from GET ``list`` calls, it
 is assumed that the response is paginated. Else, it's not.
 
 As the server handles pagination, it's not (easily) possible on the client to
