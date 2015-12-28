@@ -5,5 +5,12 @@
     "options": {
       "version": "v1",
     }
+  },
+  "simple": {
+    "baseUrl": "http://api.external.com",
+  },
+  "external": {
+    "baseUrl": "http://api.external.com",
+    "options": {}
   }
 }

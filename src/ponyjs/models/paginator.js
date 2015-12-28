@@ -16,7 +16,7 @@ class Page {
     }
 
     toString() {
-        return `<Page ${this.number} of ${this.paginator.num_pages}`;
+        return `<Page ${this.number} of ${this.paginator.num_pages}>`;
     }
 
     hasNext() {

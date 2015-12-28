@@ -34,6 +34,8 @@ describe('Paginators', () => {
         expect(page.hasPrevious()).to.be.false;
         expect(page.hasOtherPages()).to.be.true;
         expect(page.nextPageNumber()).to.equal(2);
+
+        expect(page.toString()).to.equal('<Page 1 of 3>');
     });
 
     it('should throw for invalid pages', () => {
@@ -59,6 +61,61 @@ describe('Paginators', () => {
 
         expect(() => paginator.page(0)).to.throw(InvalidPage);
         expect(() => paginator.page(4)).to.throw(InvalidPage);
+    });
+
+    it('should correctly report hasOtherPages', () => {
+        let paginator = new Paginator(Pizza);
+
+        let content = {
+            paginate_by: 1,
+            results: [{id: 2}],
+            count: 3
+        };
+
+        paginator.paginated(content);
+        let page1 = paginator.page(1);
+        let page2 = paginator.page(2);
+        let page3 = paginator.page(3);
+
+        expect(page3.hasPrevious()).to.be.true;
+        expect(page3.hasNext()).to.be.false;
+        expect(page3.hasOtherPages()).to.be.true;
+        expect(page2.hasOtherPages()).to.be.true;
+        expect(page2.hasOtherPages()).to.be.true;
+
+        let content2 = {
+            paginate_by: 1,
+            results: [{id: 1}],
+            count: 1
+        };
+        paginator2 = new Paginator(Pizza);
+        paginator2.paginated(content2);
+        let page21 = paginator2.page(1);
+        expect(page21.hasOtherPages()).to.be.false;
+    });
+
+    it('should throw for out of range pages', () => {
+        let paginator = new Paginator(Pizza);
+        let content = {
+            paginate_by: 1,
+            results: [{id: 1}],
+            count: 1
+        };
+        paginator.paginated(content);
+        let page = paginator.page(1);
+        expect(() => page.nextPageNumber()).to.throw(EmptyPage);
+        expect(() => page.previousPageNumber()).to.throw(EmptyPage);
+    });
+
+    it('should have an empty page range for zero results', () => {
+        let paginator = new Paginator(Pizza);
+        let content = {
+            paginate_by: 1,
+            results: [],
+            count: 0
+        };
+        paginator.paginated(content);
+        expect(paginator.page_range).to.deep.equal([]);
     });
 
 });

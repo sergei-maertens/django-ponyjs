@@ -4,21 +4,32 @@ import QuerySet from './query.js';
 
 
 class Manager {
-  constructor(modelClass, using) {
+  constructor(using) {
+    this.model = null;
+    this._using = using || null; // option to specify a different api client
+  }
 
+  contribute_to_class(modelClass, key) {
     this.model = modelClass;
-    this.using = using || null; // option to specify a different api client
+  }
 
+  using(alias=null) {
+    return new QuerySet(this.model).using(alias);
   }
 
   all() {
-    let qs = new QuerySet(this.model).using(this.using);
+    let qs = new QuerySet(this.model).using(this._using);
     return qs.all();
   }
 
   filter(params) {
-    let qs = new QuerySet(this.model).using(this.using);
+    let qs = new QuerySet(this.model).using(this._using);
     return qs.filter(params);
+  }
+
+  get(params) {
+    let qs = new QuerySet(this.model).using(this._using);
+    return qs.get(params);
   }
 
 }

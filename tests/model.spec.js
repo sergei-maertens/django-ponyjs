@@ -1,17 +1,13 @@
 /* global beforeEach, describe, expect, it.skip, sinon */
 'use strict';
 
-import { ModelBase, Model } from 'ponyjs/models/base';
+import { ModelBase, Model } from 'ponyjs/models/base.js';
 import { Options } from 'ponyjs/models/base';
 import Manager from 'ponyjs/models/manager';
 import { IntegerField, StringField, FloatField } from 'ponyjs/models/fields/fields';
 
 
 describe('Base model class', () => {
-
-    // beforeEach(() => {
-    //   this.sinon = sinon.sandbox.create();
-    // });
 
     afterEach(() => {
         if (ModelBase._default_manager) {
@@ -20,7 +16,6 @@ describe('Base model class', () => {
         if (ModelBase._meta) {
             delete ModelBase.__meta;
         }
-        // this.sinon.restore();
     });
 
     it('should have a _meta property', () => {
@@ -28,7 +23,7 @@ describe('Base model class', () => {
         expect(MyModel._meta).to.be.instanceof(Options);
         expect(MyModel._meta.app_label).to.equal(null);
         expect(MyModel._meta.name).to.equal('MyModel');
-        // expect(meta.endpoints).to.equal({});
+        // expect(meta.endpoints).to.deep.equal({});
     });
 
     it('should call Meta() on the real model class', () => {
@@ -99,6 +94,15 @@ describe('Base model class', () => {
                 extra: '/tests/mymodel/:id/extra/'
             });
         });
+
+        it('should have a comparison function', () => {
+            var obj1 = new this.model({id: 1});
+            var obj2 = new this.model({id: 2});
+            var obj3 = new this.model({id: 1});
+
+            expect(obj1._equals(obj2)).to.be.false;
+            expect(obj1._equals(obj3)).to.be.true;
+        });
     });
 
 });
@@ -106,7 +110,7 @@ describe('Base model class', () => {
 
 describe('Model classes', () => {
     it('should be able to be declaritively-ish defined ', () => {
-        class MyModel extends Model('MyModel', {
+        var base = Model('MyModel', {
             id: new IntegerField(),
             name: new StringField(),
             amount: new FloatField(),
@@ -116,7 +120,9 @@ describe('Model classes', () => {
             Meta: {
                 app_label: 'app',
             }
-        }) {}
+        });
+
+        class MyModel extends base {};
 
         let fields = MyModel._meta.fields;
         expect(fields.id).to.be.instanceof(IntegerField);
@@ -124,6 +130,7 @@ describe('Model classes', () => {
         expect(fields.amount).to.be.instanceof(FloatField);
 
         expect(MyModel.private).to.be.instanceof(Manager);
+        expect(MyModel.private.model).to.equal(base);
         expect(MyModel._meta.model_name).to.equal('mymodel');
         expect(MyModel._meta.app_label).to.equal('app');
     })

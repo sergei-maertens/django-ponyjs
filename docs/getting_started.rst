@@ -5,7 +5,7 @@ Django PonyJS is written entirely in EcmaScript 6 (ES6, also known as EcmaScript
 2015). This basically boils down to real modules in Javascript, akin to Python-
 like imports, and a bunch of other nice features.
 
-The code is *transpiled* to ES5, through a transiler like Babel or Traceur.
+The code is *transpiled* to ES5, through a transpiler like Babel or Traceur.
 
 .. note:: Babel is officially supported. Traceur may work, but is currently
   untested in Travis.
@@ -92,7 +92,7 @@ if you're not familiar with it yet.
   ``settings.STATIC_ROOT``. This means that collectstatic will not post-process
   the files in here, which can be a problem.
   `Django SystemJS <https://pypi.python.org/pypi/django-systemjs>`_ handles this
-  specific use case as it is aimed on ``jspm``-users.
+  specific use case as it is intended for ``jspm``-users.
 
 
 Installing Django PonyJS
@@ -106,7 +106,7 @@ Install a certain version of Django PonyJS by running:
 
 .. code-block:: bash
 
-    jspm install ponyjs=github:sergei-maertens/ponyjs@^0.0.2
+    jspm install ponyjs=github:sergei-maertens/ponyjs@^0.0.3
 
 This installs the library under the `ponyjs` alias, which makes imports more
 convenient. You can change the alias to your liking.
