@@ -94,6 +94,15 @@ describe('Base model class', () => {
                 extra: '/tests/mymodel/:id/extra/'
             });
         });
+
+        it('should have a comparison function', () => {
+            var obj1 = new this.model({id: 1});
+            var obj2 = new this.model({id: 2});
+            var obj3 = new this.model({id: 1});
+
+            expect(obj1._equals(obj2)).to.be.false;
+            expect(obj1._equals(obj3)).to.be.true;
+        });
     });
 
 });
