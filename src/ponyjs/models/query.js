@@ -6,11 +6,11 @@ import { defaultClient, getClient } from '../api/client.js';
 import Paginator from './paginator.js';
 
 
-class MultipleObjectsReturned extends Error {}
-class DoesNotExist extends Error {}
+export class MultipleObjectsReturned extends Error {}
+export class DoesNotExist extends Error {}
 
 
-class QuerySet {
+export class QuerySet {
     /**
      * Idea to make filter(...) calls chainable: return the `this` object,
      * and override QuerySet.then to trigger evaluation at that point
@@ -85,10 +85,10 @@ class QuerySet {
         if (params === undefined) {
             return this._getList(this.filters).then(objs => {
                 if (objs.length > 1) {
-                    throw MultipleObjectsReturned('Found ${objs.length} objects, expected 1.');
+                    throw new MultipleObjectsReturned(`Found ${objs.length} objects, expected 1.`);
                 }
                 if (objs.length < 1) {
-                    throw DoesNotExist('No object found.');
+                    throw new DoesNotExist('No object found.');
                 }
                 return objs[0];
             });

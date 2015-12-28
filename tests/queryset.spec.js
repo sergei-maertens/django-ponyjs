@@ -4,6 +4,7 @@
 import { Model } from 'ponyjs/models/base';
 import QuerySet from 'ponyjs/models/query';
 import { IntegerField } from 'ponyjs/models/fields/fields';
+import { defaultClient } from 'ponyjs/api/client.js';
 
 
 let Pizza = Model('Pizza', {
@@ -65,6 +66,16 @@ describe('Queryset.get', () => {
         expect(promise).to.be.instanceof(Promise);
         // we expect a 404 here because the server isn't running
         return promise.should.eventually.throw;
+    });
+
+});
+
+
+describe('Querysets', () => {
+
+    it('should default to the default client', () => {
+        let qs = new QuerySet(Pizza).using();
+        expect(qs.client).to.equal(defaultClient);
     });
 
 });

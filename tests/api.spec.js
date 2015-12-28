@@ -3,7 +3,7 @@
 
 import { Model } from 'ponyjs/models/base';
 import { Manager } from 'ponyjs/models/manager';
-import QuerySet from 'ponyjs/models/query';
+import { DoesNotExist, MultipleObjectsReturned, QuerySet} from 'ponyjs/models/query';
 import { IntegerField } from 'ponyjs/models/fields/fields';
 
 
@@ -42,7 +42,7 @@ describe('Model Manager queries', () => {
 });
 
 
-describe('QuerySets', () => {
+describe('QuerySets that return lists', () => {
 
     let server = null;
 
@@ -62,7 +62,6 @@ describe('QuerySets', () => {
     afterEach(() => {
         server.restore();
     });
-
 
     it('should make api calls', () => {
         let pizza = new Pizza({'id': 1});
@@ -118,12 +117,50 @@ describe('QuerySets', () => {
             }).and.have.property('paginator');
     });
 
+});
+
+
+describe('QuerySets that return details', () => {
+
+    let server = null;
+
+    beforeEach(() => {
+        server = sinon.fakeServer.create();
+        server.autoRespond = true;
+        server.xhr.useFilters = true;
+
+        server.xhr.addFilter(function (method, uri) {
+            let matched = uri.startsWith('http://example.com') || uri.startsWith('http://api.external.com');
+            // Sinon FakeXHR filters need to return `false` if the request should be stubbed and
+            // `true` if it should be allowed to pass through.
+            return !matched;
+        });
+    });
+
+    afterEach(() => {
+        server.restore();
+    });
+
     it('should fetch details from lists', () => {
         let pizza = new Pizza({'id': 1});
         var okResponse = generateResponse([{id: 1}]);
         let qs = Pizza.objects.filter({id: 1});
         server.respondWith('GET', 'http://example.com/api/v1/pizza/?id=1', okResponse);
         return qs.get().should.eventually.satisfy(obj => pizza._equals(obj));
+    });
+
+    it('should throw if multiple objects are returned', () => {
+        var okResponse = generateResponse([{id: 1}, {id: 2}]);
+        let qs = Pizza.objects.all();
+        server.respondWith('GET', 'http://example.com/api/v1/pizza/', okResponse);
+        return qs.get().should.be.rejectedWith(MultipleObjectsReturned);//, 'Found 2 objects, expected 1.');
+    });
+
+    it('should throw if no objects are returned', () => {
+        var okResponse = generateResponse([]);
+        let qs = Pizza.objects.all();
+        server.respondWith('GET', 'http://example.com/api/v1/pizza/', okResponse);
+        return qs.get().should.be.rejectedWith(DoesNotExist);
     });
 
     it('should fetch details from get with params', () => {
