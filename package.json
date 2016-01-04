@@ -2,7 +2,7 @@
   "name": "django-ponyjs",
   "version": "0.0.3",
   "description": "A Django Javascript library",
-  "main": "ponyjs/models.js",
+  "main": "src/ponyjs/models.js",
   "scripts": {
     "test": "grunt karma:prod"
   },
