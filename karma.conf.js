@@ -12,7 +12,7 @@ module.exports = function (config) {
 		files: [
 			// 'node_modules/babel-core/browser-polyfill.js',
 			{
-				pattern: 'fixtures/**/*',
+				pattern: 'spec/fixtures/**/*',
 			}
 		],
 
@@ -39,8 +39,8 @@ module.exports = function (config) {
 		preprocessors: {
 			'tests/**/*.js': ['babel'],
 			'src/ponyjs/**/*.js': ['babel', 'sourcemap', 'coverage'],
-			'**/*.html': ['html2js'],
-			'**/*.json': ['json_fixtures']
+			'**/*.html': ['html2js']
+			// '**/*.json': ['json_fixtures']
 		},
 
 		babelPreprocessor: {
