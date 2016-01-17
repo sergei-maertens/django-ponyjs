@@ -50,4 +50,17 @@ describe('Formsets', () => {
         expect(form.numNew).to.equal(0);
     });
 
+    it('should throw if no template is configured', () => {
+        let formset = new Formset('prefix');
+        expect(() => formset.addForm()).to.throw('Not implemented');
+
+        class MyFS extends Formset {
+            get template() {
+                return 'tpl';
+            }
+        }
+        let myfs = new MyFS('prefix');
+        expect(() => myfs.addForm()).to.not.throw('Not implemented');
+    });
+
 });

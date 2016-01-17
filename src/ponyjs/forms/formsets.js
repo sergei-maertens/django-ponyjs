@@ -54,7 +54,7 @@ export default class Formset {
      */
     get template() {
         if (!this.options.template) {
-            throw new Exception('Not implemented');
+            throw new Error('Not implemented');
         }
         return this.options.template;
     }
