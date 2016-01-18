@@ -20,7 +20,7 @@ export default class Formset {
     constructor (prefix, options={}) {
         this.prefix = prefix;
         this.id_regex = new RegExp(`(${prefix}-(\\d+|__prefix__))`, 'g');
-        this.options = $.extend(true, defaults, options);
+        this.options = $.extend(true, {}, defaults, options);
     }
 
     _getTotalFormsInput() {
