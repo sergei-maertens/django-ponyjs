@@ -3,6 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+=========================================
 Welcome to Django PonyJS's documentation!
 =========================================
 
@@ -20,7 +21,7 @@ Welcome to Django PonyJS's documentation!
 
 
 Intended usage/public
----------------------
+=====================
 Django PonyJS is not meant to replace single-page-application (SPA) frameworks
 like AngularJS, EmberJS, Backbone.js or maybe even ReactJS, if that counts.
 
@@ -46,11 +47,13 @@ Contents:
    getting_started
    supported
    usage
+   formsets
 
 
 
+=======
 Contact
-==================
+=======
 
 Bug reports, issues, pull-requests can all be submitted on
 `Github <https://github.com/sergei-maertens/django-ponyjs>`_.

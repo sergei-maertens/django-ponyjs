@@ -1,8 +1,9 @@
+=======================
 Related Django packages
--------------------------
+=======================
 
 Django Rest Framework
-*********************
+=====================
 
 The API interaction is being based on DRF, so it should work (almost) out of the box.
 
@@ -11,7 +12,7 @@ leave the ``JSONRenderer`` enabled. PonyJS sends the appropriate headers, which
 are handled correctly by DRF.
 
 Pagination
-++++++++++
+----------
 
 PonyJS automagically tries to detect if a response is paginated or not - if it's
 a Javascript Object (curly braces) that's returned from GET ``list`` calls, it
@@ -43,13 +44,13 @@ To be able to build the paginator correctly, it is required that you include the
 
 
 Tastypie
-********
+========
 
 Currently unsupported. Create a Github issue or submit a PR to add support.
 
 
 Django-SystemJS
-***************
+===============
 
 Django SystemJS integrates Django and ``jspm``. It provides a templatetag and
 management command that wrap around the ``jspm`` CLI. It makes it easy to discover

@@ -1,5 +1,7 @@
+===============
 Getting started
----------------
+===============
+
 
 Django PonyJS is written entirely in EcmaScript 6 (ES6, also known as EcmaScript
 2015). This basically boils down to real modules in Javascript, akin to Python-
@@ -14,10 +16,10 @@ To handle all this 'irregular' Javascript stuff, ``jspm`` with ``SystemJS`` is
 used for package management and module loading.
 
 Dependencies
-************
+============
 
 NodeJS and npm
-++++++++++++++
+--------------
 
 On OS-level you'll need ``nodejs`` and ``npm``, node's package manager, which
 should come with ``nodejs`` itself.
@@ -38,7 +40,7 @@ See the `NodeJS github <https://github.com/nodejs/node-v0.x-archive/wiki/Install
 
 
 JSPM
-++++
+----
 
 Next, you'll need to install ``jspm``. Install the CLI globally the first time,
 so it's available in your ``$PATH``.
@@ -96,7 +98,7 @@ if you're not familiar with it yet.
 
 
 Installing Django PonyJS
-************************
+========================
 
 ``jspm`` has its own registry which fetches from ``npm`` and ``github`` by
 default. PonyJS will always be released on ``github``, and ``github`` only for
