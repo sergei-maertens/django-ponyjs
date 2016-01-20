@@ -1,11 +1,12 @@
+=====
 Usage
------
+=====
 
 This section describes the common use cases of PonyJS and the
 required setup.
 
 Configuring the API endpoint(s)
-*******************************
+===============================
 
 To set-up the API communication, your backend needs to be configured.
 A single ``json``-file is expected in your ``settings.STATIC_ROOT``:
@@ -62,7 +63,7 @@ This alias can then be used in querysets like so:
 
 
 Defining models
-***************
+===============
 
 You already have your models defined on the server-side, so we try to not
 violate the DRY principle on the client-side. Models are your layer to access
@@ -134,7 +135,7 @@ url.
 
 
 Retrieving data from the API
-****************************
+============================
 
 This process is similar to how Django works, but then ``Promisified`` to deal
 with the async nature of HTTP requests.
@@ -183,7 +184,7 @@ exceptions if the queryset was not correctly constructred.
     let promise = Pizza.objects.filter({id: 10}).get();
 
 Promises
-++++++++
+--------
 
 Note that the variable ``promise`` was used in the previous examples. This
 indicates how the async nature of XmlHttpRequests works. The requests is fired

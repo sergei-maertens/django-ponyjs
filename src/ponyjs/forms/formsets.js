@@ -84,23 +84,31 @@ export default class Formset {
         // if a form gets deleted, its index must be determined
         // all following forms' indices must be -1'd, and the total number must
         // be updated
+        let attrs = ['id', 'name', 'for', 'class'];
 
         // loop over all elements with 'options.formCssClass' and remove them if they match
-        let re = new RegExp(`${this.prefix}-${index}-`, 'g');
+        let re = new RegExp(`${this.prefix}-${index}-`);
+        let toRemove = [];
         $(`.${this.options.formCssClass}`).each((i, el) => {
-            let formElements = $(el).children().filter((j, child) => {
-                return re.test($(child).attr('name')) || re.test($(child).attr('id'));
+            $(el).find('*').each((j, child) => {
+                if (toRemove.includes(el)) {
+                    return;
+                }
+                attrs.forEach(attr => {
+                    if (re.test($(child).attr(attr))) {
+                        toRemove.push(el);
+                        return;
+                    }
+                });
             });
 
-            if (formElements.length) {
+            toRemove.forEach(el => {
                 $(el).remove();
-            }
+            })
         });
 
         // now the DOM node(s) have been removed, update the indices
         let re2 = new RegExp(`(${this.prefix}-(\\d+)-)`);
-        let attrs = ['id', 'name', 'for', 'class'];
-
         $(`.${this.options.formCssClass}`).each((i, el) => {
             $(el).find('*').each((j, node) => {
                 $node = $(node);
