@@ -11,7 +11,7 @@ describe('Formsets', () => {
     let form = {
         template: '<div class="new-form">myfs-__prefix__</div>',
 
-        get numInitial() {
+        get count() {
             return document.getElementsByClassName('form').length;
         },
 
@@ -23,6 +23,10 @@ describe('Formsets', () => {
             let input = document.getElementById('id_myfs-TOTAL_FORMS');
             return parseInt(input.value, 10);
         },
+
+        field: function(index) {
+            return document.getElementById(`id_myfs-${index}-field`).value;
+        }
     };
 
     beforeEach(() => {
@@ -33,8 +37,14 @@ describe('Formsets', () => {
         fixture.cleanup();
     });
 
+    it('should be able to read the hidden fields', () => {
+        let formset = new Formset('myfs');
+        expect(formset.totalForms).to.equal(2);
+        expect(formset.maxForms).to.equal(1000);
+    });
+
     it('should increment the total form count on form add', () => {
-        expect(form.numInitial).to.equal(3);
+        expect(form.count).to.equal(3);
         expect(form.numNew).to.equal(0);
         expect(form.numTotal).to.equal(2);
 
@@ -61,6 +71,40 @@ describe('Formsets', () => {
         }
         let myfs = new MyFS('prefix');
         expect(() => myfs.addForm()).to.not.throw('Not implemented');
+    });
+
+    it('should be able to write values for a form', () => {
+        let formset = new Formset('myfs');
+        formset.setData(1, {field: 'new value'});
+        expect(form.field(1)).to.equal('new value');
+    });
+
+    it('must be able to remove child forms', () => {
+        let formset = new Formset('myfs', {formCssClass: 'form'});
+        formset.setData(1, {field: 'new value'});
+        expect(form.count).to.equal(3); // with hidden form
+        formset.deleteForm(0);
+        expect(form.count).to.equal(2);
+
+        // check that the remaining items have been re-indexed
+        let deleted = document.getElementById('id_myfs-1-field');
+        expect(deleted).to.be.null;
+        let deletedbis = document.getElementById('id_myfs-0-field');
+        expect(deletedbis).not.to.be.null;
+
+        // check that other props are properly replaced (for, class, id, name)
+        let deleted2 = document.getElementsByName('myfs-1-id');
+        expect(deleted2.length).to.equal(0);
+        let deleted2bis = document.getElementsByName('myfs-0-id');
+        expect(deleted2bis.length).to.equal(1);
+        let deleted3 = document.querySelectorAll('[for="id_myfs-1-field"]');
+        expect(deleted3.length).to.equal(0);
+        let deleted3bis = document.querySelectorAll('[for="id_myfs-0-field"]');
+        expect(deleted3bis.length).to.equal(1);
+
+        // index 1 -> became index 0, test by checking the input value
+        expect(form.field(0)).to.equal('new value');
+        expect(formset.totalForms).to.equal(1);
     });
 
 });

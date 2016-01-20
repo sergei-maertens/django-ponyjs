@@ -42,7 +42,7 @@ export default class Formset {
      * Getter for maximum form count hidden input
      */
     get maxForms() {
-        let selector = `#id_${this.prefix}-MAX_FORMS`;
+        let selector = `#id_${this.prefix}-MAX_NUM_FORMS`;
         return parseInt($(selector).val(), 10);
     }
 
@@ -80,39 +80,42 @@ export default class Formset {
         }
     }
 
-    deleteForm() {
+    deleteForm(index) {
         // if a form gets deleted, its index must be determined
         // all following forms' indices must be -1'd, and the total number must
         // be updated
 
-        // extracted from django.contrib.admin.static.admin.js.inlines
-        // row.find("a." + options.deleteCssClass).click(function(e1) {
-        //     e1.preventDefault();
-        //     // Remove the parent form containing this button:
-        //     row.remove();
-        //     nextIndex -= 1;
-        //     // If a post-delete callback was provided, call it with the deleted form:
-        //     if (options.removed) {
-        //         options.removed(row);
-        //     }
-        //     $(document).trigger('formset:removed', [row, options.prefix]);
-        //     // Update the TOTAL_FORMS form count.
-        //     var forms = $("." + options.formCssClass);
-        //     $("#id_" + options.prefix + "-TOTAL_FORMS").val(forms.length);
-        //     // Show add button again once we drop below max
-        //     if ((maxForms.val() === '') || (maxForms.val() - forms.length) > 0) {
-        //         addButton.parent().show();
-        //     }
-        //     // Also, update names and ids for all remaining form controls
-        //     // so they remain in sequence:
-        //     var i, formCount;
-        //     var updateElementCallback = function() {
-        //         updateElementIndex(this, options.prefix, i);
-        //     };
-        //     for (i = 0, formCount = forms.length; i < formCount; i++) {
-        //         updateElementIndex($(forms).get(i), options.prefix, i);
-        //         $(forms.get(i)).find("*").each(updateElementCallback);
-        //     }
-        // });
+        // loop over all elements with 'options.formCssClass' and remove them if they match
+        let re = new RegExp(`${this.prefix}-${index}-`, 'g');
+        $(`.${this.options.formCssClass}`).each((i, el) => {
+            let formElements = $(el).children().filter((j, child) => {
+                return re.test($(child).attr('name')) || re.test($(child).attr('id'));
+            });
+
+            if (formElements.length) {
+                $(el).remove();
+            }
+        });
+
+        // now the DOM node(s) have been removed, update the indices
+        let re2 = new RegExp(`(${this.prefix}-(\\d+)-)`);
+        let attrs = ['id', 'name', 'for', 'class'];
+
+        $(`.${this.options.formCssClass}`).each((i, el) => {
+            $(el).find('*').each((j, node) => {
+                $node = $(node);
+                attrs.forEach(attr => {
+                    let match = re2.exec($node.attr(attr));
+                    if (match) {
+                        let _index = parseInt(match[2], 10);
+                        let replacement = `${this.prefix}-${_index-1}-`;
+                        $node.attr(attr, $node.attr(attr).replace(re2, replacement));
+                    }
+                });
+            });
+        });
+
+        // if all this was succesful, update the total number of forms
+        this.totalForms -= 1;
     }
 }
