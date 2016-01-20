@@ -7,10 +7,13 @@ module.exports = function (config) {
 		// singleRun: true,
 		singleRun: false,
 
-		frameworks: ['jspm', 'mocha', 'chai-sinon', 'chai-as-promised', 'chai', 'es5-shim', 'es6-shim'],
+		frameworks: ['jspm', 'mocha', 'fixture', 'chai-sinon', 'chai-as-promised', 'chai', 'es5-shim', 'es6-shim'],
 
 		files: [
-			// 'node_modules/babel-core/browser-polyfill.js'
+			// 'node_modules/babel-core/browser-polyfill.js',
+			{
+				pattern: 'spec/fixtures/**/*',
+			}
 		],
 
 		jspm: {
@@ -36,6 +39,8 @@ module.exports = function (config) {
 		preprocessors: {
 			'tests/**/*.js': ['babel'],
 			'src/ponyjs/**/*.js': ['babel', 'sourcemap', 'coverage'],
+			'**/*.html': ['html2js']
+			// '**/*.json': ['json_fixtures']
 		},
 
 		babelPreprocessor: {
@@ -47,6 +52,10 @@ module.exports = function (config) {
 			sourceFileName: function(file) {
 				return file.originalPath;
 			}
+		},
+
+		jsonFixturesPreprocessor: {
+			variableName: '__json__'
 		},
 
 		reporters: ['coverage', 'progress'],
