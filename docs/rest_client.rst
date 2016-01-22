@@ -1,9 +1,16 @@
-=====
-Usage
-=====
+==================
+RESTful API client
+==================
 
-This section describes the common use cases of PonyJS and the
-required setup.
+The biggest feature of this library - a REST client for your backend.
+
+After declaring your models in Javascript (with minimal code), it's possible
+to make asynchronous requests to your backend REST API with an ORM-like
+syntax. No need to manually fiddle around with URLs and ``$.ajax``, that's what
+PonyJS takes care of.
+
+Of course, this does need a little bit of initial setup/configuration.
+
 
 Configuring the API endpoint(s)
 ===============================
@@ -51,7 +58,7 @@ If you have multiple API's to talk to, you have to configure these as well:
       }
     }
 
-This alias can then be used in querysets like so:
+This alias can then be used in querysets:
 
 .. code-block:: js
 
@@ -67,19 +74,20 @@ Defining models
 
 You already have your models defined on the server-side, so we try to not
 violate the DRY principle on the client-side. Models are your layer to access
-the API, and as such the API is considered to be the Single-Source-of-Truth.
+the API, and as such the backend API is considered to be the
+Single-Source-of-Truth.
 
 A model needs just enough information to be able to communicate with the API.
 
 Unfortunately, Javascript doesn't have true multiple inheritance and/or meta
-classes, so the model-definition can seem awkward.
+classes, so the model-definition can seem a bit awkward.
 
 
 .. code-block:: js
 
    import { Model } from 'ponyjs/models.js';
 
-
+   // provide the model name + declaration of fields/meta/managers
    class Pizza extends Model('Pizza', {
        Meta: {
            app_label: 'pizzas'
@@ -87,8 +95,8 @@ classes, so the model-definition can seem awkward.
    });
 
 
-By default, endpoints will be built in the form ``<baseUrl>/app_label/model_name``.
-If no `app_label`` was provided in the model definition, it will be left out.
+By default, endpoints will be built in the form ``baseUrl/app_label/model_name``.
+If no ``app_label`` was provided in the model definition, it will be left out.
 
 The auto-generated ``list`` endpoint for ``Pizza`` would be
 ``http://example.com/api/v1/pizzas/pizza/``, while the ``detail`` endpoint would
