@@ -36,8 +36,10 @@ export function translate(load) {
         }
     }
 
-    // call the original translate
+    // call the original translate to get the 'module.exports = require... bits';
     _translate(load);
 
-    return Promise.all(helperModules.map(module => System.import(module)));
+    let requires = helperModules.map(module => `require('${module}');`);
+    requires.push(load.source);
+    load.source = requires.join('\n');
 };
