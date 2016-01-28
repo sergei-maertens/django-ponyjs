@@ -17,3 +17,12 @@ Handlebars.registerHelper('firstof', (...args) => {
     }
     return '';
 });
+
+
+/**
+ * Built in tag to be able to load custom helpers in the template itself
+ */
+Handlebars.registerHelper('load', () => {
+    // this helper only gets parsed/executed on loading time, so return empty output
+    return '';
+});
