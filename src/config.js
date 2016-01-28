@@ -21,7 +21,11 @@ System.config({
     "handlebars": "github:components/handlebars.js@3.0.3",
     "jquery": "github:components/jquery@2.1.4",
     "json": "github:systemjs/plugin-json@0.1.0",
+    "hbs": "github:davis/plugin-hbs@1.2.1",
     "url": "github:jspm/nodelibs-url@0.1.0",
+    "github:davis/plugin-hbs@1.2.1": {
+      "handlebars": "github:components/handlebars.js@4.0.5"
+    },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
