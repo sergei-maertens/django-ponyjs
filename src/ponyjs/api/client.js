@@ -11,6 +11,14 @@ import apiConf from 'conf/api.json!';
 import addCsrfToken from './csrf.js';
 
 
+initialize();
+
+let clientPool = {};
+
+const supportedTokens = [
+    'version',
+];
+
 /**
  * Custom subclass to always add the CSRF check before sending a potentially
  * data-altering request.
@@ -24,16 +32,6 @@ class HttpClient extends _HttpClient {
     }
 }
 
-
-
-initialize();
-
-
-let clientPool = {};
-
-let supportedTokens = [
-    'version',
-];
 
 /**
  * Factory that takes a key from apiConf and applies that endpoint
@@ -63,13 +61,13 @@ let clientFactory = function(alias='default') {
         x.withHeader('Content-Type', 'application/json');
     });
 
-    let csrfHeader = localConf.csrfHeader ? localConf.csrfHeader : 'HTTP_X_CSRFTOKEN';
-    let csrfToken = localConf.csrfCookie ? Cookies.get(localConf.csrf_cookie) : 'csrftoken';
+    let csrfHeader = localConf.csrfHeader ? localConf.csrfHeader : 'X-CSRFToken';
+    let csrfToken = Cookies.get(localConf.csrfCookie ? localConf.csrfCookie : 'csrftoken');
 
     client._csrf = {
         key: csrfHeader,
-        value: csrfToken,
-    }
+        value: csrfToken
+    };
 
     clientPool[alias] = client;
     return client;
