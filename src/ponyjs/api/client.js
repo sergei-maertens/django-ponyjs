@@ -2,10 +2,29 @@
 
 import url from 'url';
 
-import { HttpClient } from 'aurelia-http-client';
+import { HttpClient as _HttpClient } from 'aurelia-http-client';
 import { initialize } from 'aurelia-pal-browser';
+import Cookies from 'js-cookie';
 
 import apiConf from 'conf/api.json!';
+
+import addCsrfToken from './csrf.js';
+
+
+/**
+ * Custom subclass to always add the CSRF check before sending a potentially
+ * data-altering request.
+ */
+class HttpClient extends _HttpClient {
+    send(requestMessage, transformers) {
+        if (transformers.length) {
+            transformers.push(addCsrfToken);
+        }
+        return super.send(requestMessage, transformers);
+    }
+}
+
+
 
 initialize();
 
@@ -43,6 +62,14 @@ let clientFactory = function(alias='default') {
         x.withBaseUrl(baseUrl);
         x.withHeader('Content-Type', 'application/json');
     });
+
+    let csrfHeader = localConf.csrfHeader ? localConf.csrfHeader : 'HTTP_X_CSRFTOKEN';
+    let csrfToken = localConf.csrfCookie ? Cookies.get(localConf.csrf_cookie) : 'csrftoken';
+
+    client._csrf = {
+        key: csrfHeader,
+        value: csrfToken,
+    }
 
     clientPool[alias] = client;
     return client;

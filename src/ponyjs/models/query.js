@@ -113,6 +113,15 @@ export class QuerySet {
         return this._getDetail(params);
     }
 
+    create(params) {
+        let endpoint = this.model._meta.endpoints.list;
+        let request = this.client.createRequest(endpoint).asPost().withParams(params).send();
+        return request.then(response => {
+            console.log(response);
+            debugger;
+        });
+    }
+
 }
 
 

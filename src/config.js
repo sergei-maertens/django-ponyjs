@@ -20,6 +20,7 @@ System.config({
     "core-js": "npm:core-js@1.2.6",
     "handlebars": "github:components/handlebars.js@3.0.3",
     "jquery": "github:components/jquery@2.1.4",
+    "js-cookie": "github:js-cookie/js-cookie@2.1.0",
     "json": "github:systemjs/plugin-json@0.1.0",
     "url": "github:jspm/nodelibs-url@0.1.0",
     "github:jspm/nodelibs-assert@0.1.0": {
