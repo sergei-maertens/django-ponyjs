@@ -3,7 +3,9 @@
 
 import { Model } from 'ponyjs/models/base';
 import { Manager } from 'ponyjs/models/manager';
-import { DoesNotExist, MultipleObjectsReturned, QuerySet} from 'ponyjs/models/query';
+import {
+    DoesNotExist, MultipleObjectsReturned, QuerySet, ValidationError
+} from 'ponyjs/models/query';
 import { IntegerField } from 'ponyjs/models/fields/fields';
 
 
@@ -12,9 +14,9 @@ let Pizza = Model('Pizza', {
 });
 
 
-let generateResponse = function(object) {
+let generateResponse = function(object, status=200) {
     return [
-        200,
+        status,
         {'Content-type': 'application/json'},
         JSON.stringify(object)
     ];
@@ -177,5 +179,69 @@ describe('QuerySets that return details', () => {
         var okResponse = generateResponse(_pizza);
         server.respondWith('GET', 'http://example.com/api/v1/pizza/1/?foo=bar', okResponse);
         return Pizza.objects.get({id: 1, foo: 'bar'}).should.eventually.satisfy(obj => pizza._equals(obj));
+    });
+});
+
+
+describe('QuerySets with write actions', () => {
+    let server = null;
+
+    before(() => {
+        server = sinon.fakeServer.create();
+        server.autoRespond = true;
+        server.xhr.useFilters = true;
+
+        server.xhr.addFilter(function (method, uri) {
+            let matched = uri.startsWith('http://example.com');
+            // Sinon FakeXHR filters need to return `false` if the request should be stubbed and
+            // `true` if it should be allowed to pass through.
+            return !matched;
+        });
+    });
+
+    after(() => {
+        server.restore();
+    });
+
+    it('should be possible to create instances', () => {
+        let okResponse = generateResponse({id: 1, name: 'Hawaii', vegan: false}, 201);
+        server.respondWith('POST', 'http://example.com/api/v1/pizza/', okResponse);
+        let promise = Pizza.objects.create({name: 'Hawaii', vegan: false});
+        return Promise.all([
+            promise.should.eventually.be.an.instanceof(Pizza),
+            promise.should.eventually.have.property('id', 1),
+            promise.should.eventually.have.property('name', 'Hawaii'),
+            promise.should.eventually.have.property('vegan', false),
+        ]);
+    });
+
+    it('should propagate validation errors', () => {
+        let errorResponse = generateResponse({'name': ['This field is required']}, 400);
+        server.respondWith('POST', 'http://example.com/api/v1/pizza/', errorResponse);
+        let promise = Pizza.objects.create({vegan: false});
+        return promise.should.be.rejectedWith(ValidationError);
+    });
+
+    it('should propagate validation errors 2', () => {
+        let errorResponse = generateResponse({'name': ['This field is required.']}, 400);
+        server.respondWith('POST', 'http://example.com/api/v1/pizza/', errorResponse);
+        let promise = Pizza.objects.create({vegan: false}).catch(error => error.errors);
+        return Promise.all([
+            promise.should.eventually.have.deep.property('name'),
+            promise.should.eventually.have.deep.property('name.length', 1),
+            promise.should.eventually.have.deep.property('name[0]', 'This field is required.'),
+        ]);
+    });
+
+    it('should reject error responses', () => {
+        let errorResponse = generateResponse({'error': 'Permission denied.'}, 403);
+        server.respondWith('POST', 'http://example.com/api/v1/pizza/', errorResponse);
+        let promise = Pizza.objects.create();
+        let error = promise.catch(error => error);
+        return Promise.all([
+            promise.should.be.rejected,
+            error.should.eventually.have.property('statusCode', 403),
+            error.should.eventually.have.deep.property('content.error', 'Permission denied.'),
+        ]);
     });
 });

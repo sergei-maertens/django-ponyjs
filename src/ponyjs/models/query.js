@@ -10,9 +10,9 @@ export class MultipleObjectsReturned extends Error {}
 export class DoesNotExist extends Error {}
 
 
-class ValidationError extends Error {
-    constructor(errors, ...args) {
-        super(...args);
+export class ValidationError extends Error {
+    constructor(errors) {
+        super();
         this.errors = errors;
     }
 }
