@@ -159,6 +159,8 @@ This configures the default manager (``objects``) to talk to the alternative
 url.
 
 
+.. _retrieving-data:
+
 Retrieving data from the API
 ============================
 
@@ -242,3 +244,64 @@ have all methods you defined.
 From the first example it can also be seen that on the return value, a ``paginator``
 key may be present. This is the case if the response was paginated, and it's a
 ``ponyjs.models.paginator.Paginator`` instance.
+
+
+Creating/updating/deleting data through the API
+===============================================
+
+Other than :ref:`retrieving <retrieving-data>` data, it must also be possible to
+do write actions via the API.
+
+Create
+------
+
+Similar to Django's ORM, managers support the ``create`` method. This lets you
+run code like:
+
+.. code-block:: js
+
+    let promise = Pizza.objects.create({
+      name: 'Hawaii',
+      vegan: false,
+    });
+
+
+This method returns a promise as well, which eventually resolves to a model
+instance based on the REST API response.
+
+If server side validations occur, these are available in the ``catch`` promise
+handler:
+
+.. code-block:: js
+
+    Pizza.objects.create({
+        vegan: 'invalid-value',
+    }).then(pizza => {
+      // ...
+    }).catch(errors => {
+      console.log(errors);
+      // {
+      //    'name': 'This field is required.',
+      //    'vegan': 'Fill in a valid value.',
+      // }
+    });
+
+
+.. warning::
+  At this point, validation errors are detected by looking at the
+  HttpResponse status code. If a HTTP 400 is detected, the error is wrapped in
+  a ``ponyjs.models.query.ValidationError`` instance. If a different HTTP status
+  code is returned (like a 50x), the ``errors`` variable will look different.
+
+  This will be redesigned, but for the time being it's your responsibility to
+  check the type of error.
+
+Update
+------
+
+WIP
+
+Delete
+------
+
+WIP
