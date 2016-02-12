@@ -25,9 +25,8 @@ const supportedTokens = [
  */
 class HttpClient extends _HttpClient {
     send(requestMessage, transformers) {
-        if (transformers.length) {
-            transformers.push(addCsrfToken);
-        }
+        transformers = transformers.length ? transformers : [];
+        transformers.push(addCsrfToken);
         return super.send(requestMessage, transformers);
     }
 }
@@ -74,7 +73,10 @@ let clientFactory = function(alias='default') {
 }
 
 
-let getClient = function(alias) {
+let getClient = function(alias, force=false) {
+    if (force) {
+        return clientFactory(alias);
+    }
     return clientPool[alias] || clientFactory(alias);
 }
 

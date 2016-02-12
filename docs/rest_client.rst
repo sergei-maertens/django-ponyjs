@@ -30,7 +30,9 @@ Example:
         "basePath": "api/[version]",
         "options": {
           "version": "v1",
-        }
+        },
+        "csrfCookie": "csrftoken",
+        "csrfHeader": "X-CSRFToken",
       }
     }
 
@@ -45,7 +47,22 @@ brackets are optional. Another - simpler - example is:
       }
     }
 
-If you have multiple API's to talk to, you have to configure these as well:
+
+CSRF
+----
+
+Django's suggested solution for AJAX and CSRF_ handling is included in a DRY way.
+By default PonyJS looks at the ``csrftoken`` cookie and sends the ``X-CSRFToken``
+header for POST, PUT and DELETE requests. These cookie and header names can be
+configured per API with the ``csrfCookie`` and ``csrfHeader`` keys.
+
+.. _CSRF: https://docs.djangoproject.com/en/stable/ref/csrf/#ajax
+
+
+Multiple APIs
+-------------
+
+If you have multiple APIs to talk to, you have to configure these as well:
 
 .. code-block:: json
 
