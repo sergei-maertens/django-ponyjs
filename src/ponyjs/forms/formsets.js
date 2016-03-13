@@ -91,7 +91,7 @@ export default class Formset {
         let toRemove = [];
         $(`.${this.options.formCssClass}`).each((i, el) => {
             $(el).find('*').each((j, child) => {
-                if (toRemove.includes(el)) {
+                if (toRemove.indexOf(el) > -1) {
                     return;
                 }
                 attrs.forEach(attr => {
