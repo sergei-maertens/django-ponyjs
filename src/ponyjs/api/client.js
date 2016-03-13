@@ -58,6 +58,7 @@ let clientFactory = function(alias='default') {
     let client = new HttpClient().configure(x => {
         x.withBaseUrl(baseUrl);
         x.withHeader('Content-Type', 'application/json');
+        x.withHeader('Accept', 'application/json');
     });
 
     let csrfHeader = localConf.csrfHeader ? localConf.csrfHeader : 'X-CSRFToken';
