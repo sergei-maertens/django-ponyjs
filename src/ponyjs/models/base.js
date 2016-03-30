@@ -59,7 +59,7 @@ class ModelBase {
   constructor(data) {
 
     // set up the instance state
-    this._state = new ModelState(this, data);
+    this._state = data;
 
     // set the properties
     for (let key in data) {
@@ -106,6 +106,17 @@ class ModelBase {
   // required in case the default manager is being overwritten
   static set objects(value) {
     this._default_manager = value;
+  }
+
+  get _state() {
+    return this.__state;
+  }
+
+  set _state(data) {
+    Object.defineProperty(this, '__state', {
+      value: new ModelState(this, data),
+      enumerable: false
+    })
   }
 }
 

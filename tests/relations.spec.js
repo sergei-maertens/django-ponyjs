@@ -1,11 +1,15 @@
 /* global beforeEach, describe, expect, it */
 'use strict';
 
-import { Model } from 'ponyjs/models/base';
+import { Model } from 'ponyjs/models/base.js';
+import { ForeignKey } from 'ponyjs/models/fields/related.js';
 
 
-let Kit = Model('Kit');
 let Brand = Model('Brand');
+let Kit = Model('Kit', {
+    brand: new ForeignKey(Brand)
+});
+
 
 
 let generateResponse = function(object, status=200) {
@@ -38,8 +42,19 @@ describe('Models with relation fields', () => {
         server.restore();
     });
 
+    it('should instantiate nested foreign keys', () => {
+        let kit = new Kit({
+            id: 1,
+            brand: {
+                id: 2
+            }
+        });
+        expect(kit.brand).to.be.instanceOf(Brand);
+        expect(kit.brand).to.deep.equal({id: 2});
+    });
+
     it('should resolve nested foreign keys', () => {
-        var okResponse = generateResponse({
+        let rawKit = {
             "id": 1,
             "name": "S100 & Flak 38 Schnellboot",
             "kit_number": "",
@@ -54,7 +69,8 @@ describe('Models with relation fields', () => {
                     "small": "http://example.com/media/image.jpg"
                 }
             }
-        });
+        };
+        var okResponse = generateResponse(rawKit);
         server.respondWith('GET', 'http://example.com/api/v1/kit/1/', okResponse);
         let expectedBrand = new Brand({"id": 2,
             "name": "Revell",
@@ -67,8 +83,6 @@ describe('Models with relation fields', () => {
             .eventually.be.an.instanceof(Kit)
             .and.satisfy(kit => {
                 return (kit.brand instanceof Brand);
-            }).and.satisfy(kit => {
-                return kit.brand._equals(expectedBrand);
             });
     });
 });
