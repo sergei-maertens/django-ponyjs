@@ -78,9 +78,6 @@ class ModelBase {
 
   _equals(other) {
     for (let key in this) {
-      if (key.startsWith('_')) {
-        continue;
-      }
       if (this[key] != other[key]) {
         return false;
       }

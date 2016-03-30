@@ -42,6 +42,16 @@ describe('Models with relation fields', () => {
         server.restore();
     });
 
+    it('should return null if the nested data is not present', () => {
+        let kit = new Kit({id: 1});
+        let kit2 = new Kit({id: 2, brand: null});
+        expect(kit.brand).to.be.null;
+        // check that second access returns the same instance
+        let brand = kit.brand;
+        expect(kit.brand).to.equal(brand);
+        expect(kit2.brand).to.be.null;
+    });
+
     it('should instantiate nested foreign keys', () => {
         let kit = new Kit({
             id: 1,
