@@ -8,36 +8,24 @@ import { Field } from './fields.js';
  * correct properties. This should be implemented with proxies as soon as they're
  * natively available (in the browser or Babel/Traceur)
  */
-class RelationDescriptor {
+export class RelationDescriptor {
     constructor(field, name) {
         this.field = field;
         this.name = name;
     }
 
     as_descriptor() {
+        let descriptor = this;
         return {
-            get: this.getter,
-            set: this.setter
+            get: function() { // not an arrow function because we need the proper scope
+                return descriptor.get.call(descriptor, this);
+            },
+            set: function(value) {
+                // this points to the model instance
+                return descriptor.set.call(descriptor, this, value);
+            },
         };
     }
-
-    get getter() {
-        let descriptor = this;
-        // scope changes for descriptors, use a closure
-        return function() {
-            return descriptor.get.call(descriptor, this);
-        }
-    };
-
-
-    get setter() {
-        let descriptor = this;
-        // scope changes for descriptors, use a closure
-        return function(value) {
-            // this points to the model instance
-            return descriptor.set.call(descriptor, this, value);
-        };
-    };
 
     get(instance) {
         throw new Error('Not implemented');
@@ -53,7 +41,7 @@ class RelationDescriptor {
  * Takes a nested object for a 'root' object and instantiates the related
  * model instance.
  */
-class NestedRelationDescriptor extends RelationDescriptor {
+export class NestedRelationDescriptor extends RelationDescriptor {
     get(instance) {
         let name = this.name;
         let raw = instance[`_${name}_raw`];
@@ -78,6 +66,10 @@ class NestedRelationDescriptor extends RelationDescriptor {
 }
 
 
+/**
+ * Base class for related fields. This should never be instantiated
+ * directly.
+ */
 class RelatedField extends Field {
 
     /**
@@ -103,12 +95,12 @@ class RelatedField extends Field {
 }
 
 
-class NestedRelatedField extends RelatedField {
+/**
+ * Related field that deals with nested objects through the correct descriptor.
+ */
+export class NestedRelatedField extends RelatedField {
     constructor(...args) {
         super(...args);
         this.descriptor = NestedRelationDescriptor;
     }
 }
-
-
-export { NestedRelatedField };

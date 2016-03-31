@@ -2,7 +2,7 @@
 'use strict';
 
 import { Model } from 'ponyjs/models/base.js';
-import { NestedRelatedField } from 'ponyjs/models/fields/related.js';
+import { NestedRelatedField, RelationDescriptor } from 'ponyjs/models/fields/related.js';
 
 
 let Brand = Model('Brand');
@@ -19,6 +19,17 @@ let generateResponse = function(object, status=200) {
         JSON.stringify(object)
     ];
 }
+
+
+describe('The base relation descriptor', () => {
+
+    it('should throw on getter/setter access', () => {
+        let descriptor = new RelationDescriptor(null, null);
+        expect(() => descriptor.get(null)).to.throw(Error, 'Not implemented');
+        expect(() => descriptor.set(null, null)).to.throw(Error, 'Not implemented');
+    });
+
+});
 
 
 describe('Models with relation fields', () => {
