@@ -2,12 +2,12 @@
 'use strict';
 
 import { Model } from 'ponyjs/models/base.js';
-import { ForeignKey } from 'ponyjs/models/fields/related.js';
+import { RelatedField } from 'ponyjs/models/fields/related.js';
 
 
 let Brand = Model('Brand');
 let Kit = Model('Kit', {
-    brand: new ForeignKey(Brand)
+    brand: new RelatedField(Brand)
 });
 
 

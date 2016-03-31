@@ -3,7 +3,7 @@
 import { Field } from './fields.js';
 
 
-class ForeignKey extends Field {
+class RelatedField extends Field {
 
     /**
      * @param to: Model Class this relates to
@@ -29,7 +29,7 @@ class ForeignKey extends Field {
                 if (instance) {
                     return instance;
                 }
-                instance = raw ? new field.to(raw) : null
+                instance = raw ? new field.to(raw) : null;
                 if (instance) {
                     this[`_${name}_cached`] = instance;
                 }
@@ -44,4 +44,4 @@ class ForeignKey extends Field {
 }
 
 
-export { ForeignKey };
+export { RelatedField };
