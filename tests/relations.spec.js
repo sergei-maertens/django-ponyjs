@@ -2,12 +2,12 @@
 'use strict';
 
 import { Model } from 'ponyjs/models/base.js';
-import { RelatedField } from 'ponyjs/models/fields/related.js';
+import { NestedRelatedField } from 'ponyjs/models/fields/related.js';
 
 
 let Brand = Model('Brand');
 let Kit = Model('Kit', {
-    brand: new RelatedField(Brand)
+    brand: new NestedRelatedField(Brand)
 });
 
 
