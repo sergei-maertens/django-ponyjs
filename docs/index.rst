@@ -29,7 +29,7 @@ having to write those abstractions yourself.
 
 Currently, PonyJS offers two 'modules':
 
-* A RESTful API client with ORM syntax (read only at the moment)
+* A RESTful API client with ORM syntax (mostly read only at the moment)
 * A class to deal with :ref:`formsets <formsets>`.
 
 See :ref:`getting-started` for installation instructions.
@@ -56,12 +56,12 @@ custom approach where a full blown SPA framework would be too much.
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   getting_started
-   rest_client
-   formsets
-   supported
+    getting_started
+    rest_client/index
+    formsets
+    supported
 
 
 
@@ -74,3 +74,11 @@ Bug reports, issues, pull-requests can all be submitted on
 
 If you need help, submit an issue, or maybe try and find me on the Django IRC
 channel, username *xBBTx*. You can also `tweet <https://twitter.com/xBBTx>`_ me.
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
