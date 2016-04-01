@@ -68,7 +68,7 @@ try:
         pjson = json.loads(pjson)
     VERSION = pjson['version']
 except:
-    VERSION = '0.0.4'
+    VERSION = '0.2.0'
 
 version = VERSION
 # The full version, including alpha/beta/rc tags.
