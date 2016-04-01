@@ -11,8 +11,9 @@ Single-Source-of-Truth.
 
 A model needs just enough information to be able to communicate with the API.
 
-Unfortunately, Javascript doesn't have true multiple inheritance and/or meta
-classes, so the model-definition can seem a bit awkward.
+.. note::
+  Unfortunately, Javascript doesn't have true multiple inheritance and/or meta
+  classes, so the model-definition can seem a bit awkward.
 
 
 .. code-block:: js
@@ -27,7 +28,11 @@ classes, so the model-definition can seem a bit awkward.
    });
 
 
-By default, endpoints will be built in the form ``baseUrl/app_label/model_name``.
+
+Endpoint configuration
+======================
+
+By default, endpoints will be built in the form ``{baseUrl}/app_label/model_name``.
 If no ``app_label`` was provided in the model definition, it will be left out.
 
 The auto-generated ``list`` endpoint for ``Pizza`` would be
@@ -36,7 +41,7 @@ be ``http://example.com/api/v1/pizzas/pizza/:id/``. Each ``:key`` is interpolate
 with the object itself, so a ``Pizza`` instance ``new Pizza({id: 10})`` would
 resolve to ``http://example.com/api/v1/pizzas/pizza/10/``.
 
-These endpoints can be configured:
+These auto-discovered endpoints can ofcourse be specified manually:
 
 .. code-block:: js
 
