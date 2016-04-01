@@ -2,13 +2,10 @@
 'use strict';
 
 import { Model } from 'ponyjs/models/base.js';
-import { NestedRelatedField, RelationDescriptor } from 'ponyjs/models/fields/related.js';
+import { NestedRelatedField, PrimaryKeyRelatedField, RelationDescriptor } from 'ponyjs/models/fields/related.js';
 
 
 let Brand = Model('Brand');
-let Kit = Model('Kit', {
-    brand: new NestedRelatedField(Brand)
-});
 
 
 describe('The base relation descriptor', () => {
@@ -22,7 +19,11 @@ describe('The base relation descriptor', () => {
 });
 
 
-describe('Models with relation fields', () => {
+describe('Models with nested related fields', () => {
+
+    let Kit = Model('Kit', {
+        brand: new NestedRelatedField(Brand)
+    });
 
     it('should return null if the nested data is not present', () => {
         let kit = new Kit({id: 1});
@@ -43,6 +44,21 @@ describe('Models with relation fields', () => {
         });
         expect(kit.brand).to.be.instanceOf(Brand);
         expect(kit.brand).to.deep.equal({id: 2});
+    });
+
+});
+
+
+describe('Models with pk related fields', () => {
+
+    let Kit = Model('Kit', {
+        brand: new PrimaryKeyRelatedField(Brand)
+    });
+
+    it('should instantiate nested foreign keys', () => {
+        let kit = new Kit({brand: 1});
+        expect(kit.brand).to.be.instanceOf(Brand);
+        expect(kit.brand).to.deep.equal({id: 1});
     });
 
 });
