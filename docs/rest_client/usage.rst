@@ -49,11 +49,13 @@ endpoint if parameters are passed in.
 However, it's also possible to call ``.get`` without parameters on a queryset,
 and it works similar as Django: it will return the only object matching. It's
 possible that this will throw ``MultipleObjectsReturned`` or ``DoesNotExist``
-exceptions if the queryset was not correctly constructred.
+exceptions if the queryset was not correctly constructed.
 
 .. code-block:: js
 
     let promise = Pizza.objects.filter({id: 10}).get();
+
+.. _rest-client-usage-promises:
 
 Promises
 --------
