@@ -75,11 +75,11 @@ class PrimaryKeyRelationDescriptor extends RelationDescriptor {
     get(instance) {
         let cache_name = this.get_cache_name();
         if (instance[cache_name] !== undefined) {
-            return instance[cache_name];
+            return Promise.resolve(instance[cache_name]);
         }
         let pk = instance[`${this.name}_id`];
         if (pk === undefined || pk === null) {
-            return null;
+            return Promise.resolve(null);
         }
         // do the lookup
         let model = this.field.to;
@@ -92,7 +92,7 @@ class PrimaryKeyRelationDescriptor extends RelationDescriptor {
 
     /**
      * Store the pk on the instance, similar to Django ForeignKey.
-     * @param pk: primary key value
+     * @param id: primary key value
      */
     set(instance, id) {
         instance[`${this.name}_id`] = id;
