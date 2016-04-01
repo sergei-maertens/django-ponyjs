@@ -27,6 +27,10 @@ export class RelationDescriptor {
         };
     }
 
+    get_cache_name() {
+        return `_${this.name}_cache`;
+    }
+
     get(instance) {
         throw new Error('Not implemented');
     }
@@ -41,17 +45,18 @@ export class RelationDescriptor {
  * Takes a nested object for a 'root' object and instantiates the related
  * model instance.
  */
-export class NestedRelationDescriptor extends RelationDescriptor {
+class NestedRelationDescriptor extends RelationDescriptor {
     get(instance) {
         let name = this.name;
         let raw = instance[`_${name}_raw`];
-        let nestedInstance = instance[`_${name}_cached`];
-        if (nestedInstance) {
+        let cache_name = this.get_cache_name();
+        let nestedInstance = instance[cache_name];
+        if (nestedInstance !== undefined) {
             return nestedInstance;
         }
-        nestedInstance = raw ? new this.field.to(raw) : null;
+        nestedInstance = raw ? new this.field.model(raw) : null;
         if (nestedInstance) {
-            instance[`_${name}_cached`] = nestedInstance;
+            instance[cache_name] = nestedInstance;
         }
         return nestedInstance;
     }
@@ -62,6 +67,31 @@ export class NestedRelationDescriptor extends RelationDescriptor {
      */
     set(instance, data) {
         instance[`_${this.name}_raw`] = data;
+    }
+}
+
+
+class PrimaryKeyRelationDescriptor extends RelationDescriptor {
+    get(instance) {
+        let cache_name = this.get_cache_name();
+        if (instance[cache_name] !== undefined) {
+            return instance[cache_name];
+        }
+        let pk = instance[`${this.name}_id`];
+        if (pk === undefined || pk === null) {
+            return null;
+        }
+        // do the lookup
+        let model = this.field.model;
+        return model._default_manager.get({id: pk});
+    }
+
+    /**
+     * Store the pk on the instance, similar to Django ForeignKey.
+     * @param pk: primary key value
+     */
+    set(instance, id) {
+        instance[`${this.name}_id`] = id;
     }
 }
 
@@ -77,7 +107,7 @@ class RelatedField extends Field {
      */
     constructor(to, name, options) {
         super(name, options);
-        this.to = to;
+        this.model = to; // might have to be abstracted in a ForeignObjectRel object or similar
         this.descriptor = null; // set up the type of descriptor used
     }
 
@@ -102,5 +132,13 @@ export class NestedRelatedField extends RelatedField {
     constructor(...args) {
         super(...args);
         this.descriptor = NestedRelationDescriptor;
+    }
+}
+
+
+export class PrimaryKeyRelatedField extends RelatedField {
+    constructor(...args) {
+        super(...args);
+        this.descriptor = PrimaryKeyRelationDescriptor;
     }
 }

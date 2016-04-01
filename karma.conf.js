@@ -20,7 +20,8 @@ module.exports = function (config) {
 			configFile: 'src/config.js',
 			packages: 'src/jspm_packages',
 			loadFiles: [
-				'tests/**/*.spec.js'
+				'tests/**/*.spec.js',
+				'tests/**/*.helper.js',
 			],
 			serveFiles: [
 				'src/**/*.js',
