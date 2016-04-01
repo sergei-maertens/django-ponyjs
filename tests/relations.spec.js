@@ -44,15 +44,14 @@ describe('Models with nested related fields', () => {
                 id: 2
             }
         });
-        return kit.brand.should.eventually
-            .be.instanceOf(Brand)
-            and.deep.equal({id: 2});
+        expect(kit.brand).to.be.instanceOf(Brand)
+            .and.deep.equal({id: 2});
     });
 
 });
 
 
-describe.only('Models with pk related fields', () => {
+describe('Models with pk related fields', () => {
 
     let server = null;
 
@@ -72,8 +71,9 @@ describe.only('Models with pk related fields', () => {
         let kit = new Kit({brand: 1});
         let okResponse = generateResponse({id: 1, name: 'pony'});
         server.respondWith('GET', 'http://example.com/api/v1/brand/1/', okResponse);
-        expect(kit.brand).to.be.instanceOf(Brand);
-        expect(kit.brand).to.deep.equal({id: 1, name: 'pony'});
+        return kit.brand.should.eventually
+            .be.instanceOf(Brand)
+            .and.deep.equal({id: 1, name: 'pony'});
     });
 
 });

@@ -54,7 +54,7 @@ class NestedRelationDescriptor extends RelationDescriptor {
         if (nestedInstance !== undefined) {
             return nestedInstance;
         }
-        nestedInstance = raw ? new this.field.model(raw) : null;
+        nestedInstance = raw ? new this.field.to(raw) : null;
         if (nestedInstance) {
             instance[cache_name] = nestedInstance;
         }
@@ -82,8 +82,12 @@ class PrimaryKeyRelationDescriptor extends RelationDescriptor {
             return null;
         }
         // do the lookup
-        let model = this.field.model;
-        return model._default_manager.get({id: pk});
+        let model = this.field.to;
+        // TODO: getter for _default_manager
+        return model.objects.get({id: pk}).then(obj => {
+            instance[cache_name] = obj;
+            return obj;
+        });
     }
 
     /**
@@ -107,7 +111,7 @@ class RelatedField extends Field {
      */
     constructor(to, name, options) {
         super(name, options);
-        this.model = to; // might have to be abstracted in a ForeignObjectRel object or similar
+        this.to = to; // might have to be abstracted in a ForeignObjectRel object or similar
         this.descriptor = null; // set up the type of descriptor used
     }
 
