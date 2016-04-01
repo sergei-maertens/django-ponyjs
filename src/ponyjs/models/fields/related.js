@@ -32,7 +32,7 @@ export class RelationDescriptor {
     }
 
     get(instance) {
-        throw new Error('Not implemented');
+        return Promise.reject(new Error('Not implemented'));
     }
 
     set(instance, value) {
@@ -52,13 +52,13 @@ class NestedRelationDescriptor extends RelationDescriptor {
         let cache_name = this.get_cache_name();
         let nestedInstance = instance[cache_name];
         if (nestedInstance !== undefined) {
-            return nestedInstance;
+            return Promise.resolve(nestedInstance);
         }
         nestedInstance = raw ? new this.field.to(raw) : null;
         if (nestedInstance) {
             instance[cache_name] = nestedInstance;
         }
-        return nestedInstance;
+        return Promise.resolve(nestedInstance);
     }
 
     /**
