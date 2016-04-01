@@ -3,8 +3,8 @@
 
 import { generateResponse, fakeServer } from './api.helper.js';
 
-import { Model } from 'ponyjs/models/base.js';
-import { NestedRelatedField, PrimaryKeyRelatedField, RelationDescriptor } from 'ponyjs/models/fields/related.js';
+import { Model, NestedRelatedField, PrimaryKeyRelatedField } from 'ponyjs/models.js';
+import { RelationDescriptor } from 'ponyjs/models/fields/related.js';
 
 
 let Brand = Model('Brand');
