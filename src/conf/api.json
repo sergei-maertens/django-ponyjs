@@ -4,7 +4,7 @@
     "basePath": "api/[version]",
     "options": {
       "version": "v1",
-    }
+    },
   },
   "simple": {
     "baseUrl": "http://api.external.com",
@@ -12,5 +12,14 @@
   "external": {
     "baseUrl": "http://api.external.com",
     "options": {}
+  },
+  "csrf": {
+    "baseUrl": "http://example.com",
+    "basePath": "api/[version]",
+    "options": {
+      "version": "v1",
+    },
+    "csrfCookie": "alternative-csrftoken",
+    "csrfHeader": "X-CSRF",
   }
 }

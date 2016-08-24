@@ -1,20 +1,39 @@
 'use strict';
 
+// loads the polyfills like Object.assign
+import 'core-js';
+
 import url from 'url';
 
-import { HttpClient } from 'aurelia-http-client';
+import { HttpClient as _HttpClient } from 'aurelia-http-client';
 import { initialize } from 'aurelia-pal-browser';
+import Cookies from 'js-cookie';
 
 import apiConf from 'conf/api.json!';
 
-initialize();
+import addCsrfToken from './csrf.js';
 
+
+initialize();
 
 let clientPool = {};
 
-let supportedTokens = [
+const supportedTokens = [
     'version',
 ];
+
+/**
+ * Custom subclass to always add the CSRF check before sending a potentially
+ * data-altering request.
+ */
+class HttpClient extends _HttpClient {
+    send(requestMessage, transformers) {
+        transformers = transformers.length ? transformers : [];
+        transformers.push(addCsrfToken);
+        return super.send(requestMessage, transformers);
+    }
+}
+
 
 /**
  * Factory that takes a key from apiConf and applies that endpoint
@@ -42,14 +61,26 @@ let clientFactory = function(alias='default') {
     let client = new HttpClient().configure(x => {
         x.withBaseUrl(baseUrl);
         x.withHeader('Content-Type', 'application/json');
+        x.withHeader('Accept', 'application/json');
     });
+
+    let csrfHeader = localConf.csrfHeader ? localConf.csrfHeader : 'X-CSRFToken';
+    let csrfToken = Cookies.get(localConf.csrfCookie ? localConf.csrfCookie : 'csrftoken');
+
+    client._csrf = {
+        key: csrfHeader,
+        value: csrfToken
+    };
 
     clientPool[alias] = client;
     return client;
 }
 
 
-let getClient = function(alias) {
+let getClient = function(alias, force=false) {
+    if (force) {
+        return clientFactory(alias);
+    }
     return clientPool[alias] || clientFactory(alias);
 }
 

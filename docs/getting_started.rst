@@ -1,19 +1,36 @@
+.. _getting-started:
+
 ===============
 Getting started
 ===============
 
-
 Django PonyJS is written entirely in EcmaScript 6 (ES6, also known as EcmaScript
-2015). This basically boils down to real modules in Javascript, akin to Python-
-like imports, and a bunch of other nice features.
+2015). This is the latest accepted spec for EcmaScript/Javascript and
+soon-to-be-available in all major browsers.
+
+ES6 has some real improvements, such as a real module system with proper scoping
+in a syntactically pleasant way. The imports almost look like Python imports,
+through *arrow functions* the scope of `this` is preserved, 'native' classes,
+native `Promises`...
+
+ES7 adds even more interesting features, like decorators!
 
 The code is *transpiled* to ES5, through a transpiler like Babel or Traceur.
+This transpiler makes sure all new features that are not yet natively available
+in the browser continue to work, by converting the ES6 code to ES5 code.
 
 .. note:: Babel is officially supported. Traceur may work, but is currently
-  untested in Travis.
+  untested.
 
-To handle all this 'irregular' Javascript stuff, ``jspm`` with ``SystemJS`` is
-used for package management and module loading.
+To handle all this new and fancy Javascript, ``SystemJS`` is used. It's a
+Javascript module loader that understands different formats: ES6 imports,
+CommonJS and AMD. This means you can use most libraries that exist in the wild,
+even if they come from a different ecosystem.
+
+``jspm`` is a great package manager built on top of ``SystemJS`` for the
+browser. Both are written by Guy Bedford, who's been putting in tons of effort
+with very little gains, at least check out his work!
+
 
 Dependencies
 ============
@@ -23,6 +40,8 @@ NodeJS and npm
 
 On OS-level you'll need ``nodejs`` and ``npm``, node's package manager, which
 should come with ``nodejs`` itself.
+
+NPM is used to install ``jspm`` and friends.
 
 .. code-block:: bash
 
@@ -42,12 +61,16 @@ See the `NodeJS github <https://github.com/nodejs/node-v0.x-archive/wiki/Install
 JSPM
 ----
 
-Next, you'll need to install ``jspm``. Install the CLI globally the first time,
-so it's available in your ``$PATH``.
+Next, you'll need to install ``jspm``.
+
+If it's the first time installing, it can be installed globally. Later, the CLI
+will run against your version-pinned local ``jspm`` install.
 
 .. code-block:: bash
 
-    npm install -g jspm
+    npm install -g jspm  # -g flag for global, sudo may be required
+
+Installing globally usually ensures that ``jspm`` is available in your ``$PATH``.
 
 ``jspm`` uses Node ``package.json``. If you don't have one yet, you can create
 one by running:
@@ -55,6 +78,7 @@ one by running:
 .. code-block:: bash
 
     npm init  # and follow the prompts.
+
 
 You can now install a local version of ``jspm``, which is recommended to pin
 your dependency versions - this helps avoiding surprises.
@@ -65,7 +89,8 @@ your dependency versions - this helps avoiding surprises.
 
 
 It's now time to initialize your ``jspm`` project. This is an interactive prompt
-again, but we'll need to deviate from the defaults a bit.
+again, but we'll need to deviate from the defaults a bit to make it play nice
+with Django.
 
 .. code-block:: bash
 
@@ -94,26 +119,27 @@ if you're not familiar with it yet.
   ``settings.STATIC_ROOT``. This means that collectstatic will not post-process
   the files in here, which can be a problem.
   `Django SystemJS <https://pypi.python.org/pypi/django-systemjs>`_ handles this
-  specific use case as it is intended for ``jspm``-users.
+  specific use case as it is intended for ``jspm``-users. There is an inherent
+  limitation within JSPM which should be lifted with the 0.18 release.
 
 
 Installing Django PonyJS
 ========================
 
-``jspm`` has its own registry which fetches from ``npm`` and ``github`` by
-default. PonyJS will always be released on ``github``, and ``github`` only for
-the time being.
+``jspm`` has its own registry which fetches packages from ``npm`` and ``github``
+by default. PonyJS will always be released on ``github``, and ``github`` only for
+the time being. It doesn't make sense to publish on NPM as it's browser-only.
 
-Install a certain version of Django PonyJS by running:
+Install a pinned version of PonyJS by running:
 
 .. code-block:: bash
 
-    jspm install ponyjs=github:sergei-maertens/ponyjs@^0.0.3
+    jspm install ponyjs=github:sergei-maertens/ponyjs@^0.0.4
 
-This installs the library under the `ponyjs` alias, which makes imports more
+This installs the library under the **ponyjs** alias, which makes imports more
 convenient. You can change the alias to your liking.
 
-Usage in your own code:
+Example usage in your own code:
 
 
 .. code-block:: js
@@ -134,6 +160,4 @@ Usage in your own code:
         return false;
     });
 
-
-
-
+For more examples, be sure to check the rest of the documentation.

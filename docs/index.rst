@@ -20,8 +20,24 @@ Welcome to Django PonyJS's documentation!
     :alt: Documentation Status
 
 
+What's *PonyJS*?
+================
+
+PonyJS is a Javascript library for Django developers. It provides a set of
+classes/utilities to write DRY (don't repeat yourself) Javascript, without
+having to write those abstractions yourself.
+
+Currently, PonyJS offers two 'modules':
+
+* A RESTful API client with ORM syntax (mostly read only at the moment)
+* A class to deal with :ref:`formsets <formsets>`.
+
+See :ref:`getting-started` for installation instructions.
+
+
 Intended usage/public
 =====================
+
 Django PonyJS is not meant to replace single-page-application (SPA) frameworks
 like AngularJS, EmberJS, Backbone.js or maybe even ReactJS, if that counts.
 
@@ -37,17 +53,15 @@ custom approach where a full blown SPA framework would be too much.
 
 
 
-
-
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   getting_started
-   supported
-   usage
-   formsets
+    getting_started
+    rest_client/index
+    formsets
+    supported
 
 
 
@@ -60,3 +74,11 @@ Bug reports, issues, pull-requests can all be submitted on
 
 If you need help, submit an issue, or maybe try and find me on the Django IRC
 channel, username *xBBTx*. You can also `tweet <https://twitter.com/xBBTx>`_ me.
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

@@ -1,6 +1,6 @@
 {
   "name": "django-ponyjs",
-  "version": "0.0.4",
+  "version": "0.2.1",
   "description": "A Django Javascript library",
   "main": "src/ponyjs/models.js",
   "scripts": {
@@ -63,11 +63,12 @@
       "lib": "src/ponyjs"
     },
     "dependencies": {
-      "aurelia-http-client": "npm:aurelia-http-client@^1.0.0-beta.1",
-      "aurelia-pal-browser": "npm:aurelia-pal-browser@^1.0.0-beta.1",
+      "aurelia-http-client": "npm:aurelia-http-client@1.0.0-beta.1.1.2",
+      "aurelia-pal-browser": "npm:aurelia-pal-browser@1.0.0-beta.1.1.4",
       "core-js": "npm:core-js@^1.2.6",
       "handlebars": "github:components/handlebars.js@^3.0.3",
       "jquery": "github:components/jquery@^2.1.4",
+      "js-cookie": "github:js-cookie/js-cookie@^2.1.0",
       "json": "github:systemjs/plugin-json@^0.1.0",
       "url": "github:jspm/nodelibs-url@^0.1.0"
     },

@@ -9,7 +9,7 @@ describe('The API client interface', () => {
     it('should return the default client by default', () => {
 
         let client = getClient();
-        expect(client.requestTransformers.length).to.equal(2); // baseurl + json
+        expect(client.requestTransformers.length).to.equal(3); // baseurl + json
 
     });
 

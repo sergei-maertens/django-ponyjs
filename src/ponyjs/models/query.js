@@ -10,6 +10,14 @@ export class MultipleObjectsReturned extends Error {}
 export class DoesNotExist extends Error {}
 
 
+export class ValidationError extends Error {
+    constructor(errors) {
+        super();
+        this.errors = errors;
+    }
+}
+
+
 export class QuerySet {
     /**
      * Idea to make filter(...) calls chainable: return the `this` object,
@@ -111,6 +119,22 @@ export class QuerySet {
 
     get(params) {
         return this._getDetail(params);
+    }
+
+    create(params) {
+        let endpoint = this.model._meta.endpoints.list;
+        let request = this.client.createRequest(endpoint).asPost().withContent(params).send();
+        return request.then(response => {
+            let instance = new this.model(response.content);
+            return instance;
+        }, errorResponse => {
+            // validation error
+            if (errorResponse.statusCode == 400) {
+                throw new ValidationError(errorResponse.content);
+            }
+            // any other error
+            throw errorResponse;
+        });
     }
 
 }
