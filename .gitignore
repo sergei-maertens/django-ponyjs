@@ -37,3 +37,4 @@ docs/_build
 jspm_packages
 
 coverage
+.idea/
