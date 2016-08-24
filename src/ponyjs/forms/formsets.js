@@ -27,7 +27,9 @@ export default class Formset {
      * Getter and setter for total form count hidden input
      */
     get totalForms() {
-        return this._getTotalFormsInput() ? parseInt(this._getTotalFormsInput().value, 10) : null;
+        if (this._getTotalFormsInput()) {
+            return parseInt(this._getTotalFormsInput().value, 10);
+        }
     }
 
     set totalForms(num) {
