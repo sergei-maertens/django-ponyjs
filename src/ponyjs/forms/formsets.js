@@ -7,43 +7,39 @@
 
 'use strict';
 
-import $ from 'jquery';
-
-
 const defaults = {
     formCssClass: 'form',
     template: null,
 };
 
-
 export default class Formset {
-    constructor (prefix, options={}) {
+    constructor(prefix, options = {}) {
         this.prefix = prefix;
         this.id_regex = new RegExp(`(${prefix}-(\\d+|__prefix__))`, 'g');
-        this.options = $.extend(true, {}, defaults, options);
+        this.options = Object.assign({}, defaults, options);
     }
 
     _getTotalFormsInput() {
-        return $(`#id_${this.prefix}-TOTAL_FORMS`);
+        return document.getElementById(`id_${this.prefix}-TOTAL_FORMS`);
     }
 
     /**
      * Getter and setter for total form count hidden input
      */
     get totalForms() {
-        return parseInt(this._getTotalFormsInput().val(), 10);
+        return this._getTotalFormsInput() ? parseInt(this._getTotalFormsInput().value, 10) : null;
     }
 
     set totalForms(num) {
-        this._getTotalFormsInput().val(num);
+        this._getTotalFormsInput().value = num;
     }
 
     /**
      * Getter for maximum form count hidden input
      */
     get maxForms() {
-        let selector = `#id_${this.prefix}-MAX_NUM_FORMS`;
-        return parseInt($(selector).val(), 10);
+        let el = document.getElementById(`id_${this.prefix}-MAX_NUM_FORMS`);
+        return parseInt(el.value, 10);
     }
 
     /**
@@ -74,9 +70,9 @@ export default class Formset {
     }
 
     setData(index, data) {
-        for (let key in data) {
+        for (let key of Object.keys(data)) {
             let name = `${this.prefix}-${index}-${key}`;
-            $(`[name="${name}"]`).val(data[key]);
+            document.querySelector(`[name="${name}"]`).value = data[key];
         }
     }
 
@@ -89,41 +85,41 @@ export default class Formset {
         // loop over all elements with 'options.formCssClass' and remove them if they match
         let re = new RegExp(`${this.prefix}-${index}-`);
         let toRemove = [];
-        $(`.${this.options.formCssClass}`).each((i, el) => {
-            $(el).find('*').each((j, child) => {
-                if (toRemove.indexOf(el) > -1) {
-                    return;
-                }
-                attrs.forEach(attr => {
-                    if (re.test($(child).attr(attr))) {
+
+        Array.from(document.getElementsByClassName(`${this.options.formCssClass}`)).forEach((el)=> {
+            for (let child of el.children) {
+
+                if (toRemove.includes(el)) return;
+
+                for (let attr of attrs) {
+                    if (re.test(child.getAttribute(attr))) {
                         toRemove.push(el);
                         return;
                     }
-                });
-            });
+                }
+            }
 
             toRemove.forEach(el => {
-                $(el).remove();
+                el.parentNode.removeChild(el);
             })
         });
 
         // now the DOM node(s) have been removed, update the indices
         let re2 = new RegExp(`(${this.prefix}-(\\d+)-)`);
-        $(`.${this.options.formCssClass}`).each((i, el) => {
-            $(el).find('*').each((j, node) => {
-                $node = $(node);
+        for (let el of document.getElementsByClassName(`${this.options.formCssClass}`)) {
+            for (let node of el.querySelectorAll('*')) {
                 attrs.forEach(attr => {
-                    let match = re2.exec($node.attr(attr));
+                    let match = re2.exec(node.getAttribute(attr));
                     if (match) {
                         let _index = parseInt(match[2], 10);
-                        let replacement = `${this.prefix}-${_index-1}-`;
-                        $node.attr(attr, $node.attr(attr).replace(re2, replacement));
+                        let replacement = `${this.prefix}-${_index - 1}-`;
+                        node.setAttribute(attr, node.getAttribute(attr).replace(re2, replacement));
                     }
                 });
-            });
-        });
+            }
+        }
 
-        // if all this was succesful, update the total number of forms
+        // if all this was successful, update the total number of forms
         this.totalForms -= 1;
     }
 }
