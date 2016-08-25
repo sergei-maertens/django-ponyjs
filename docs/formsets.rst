@@ -42,7 +42,7 @@ of the formset. The second one is an optional object with :ref:`options <formset
 
     import Formset from 'ponyjs/forms/formsets.js';
 
-    let formset = Formset('form');
+    let formset = new Formset('form');
 
 
 .. _formset-add-form:
