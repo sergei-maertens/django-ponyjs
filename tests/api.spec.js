@@ -20,7 +20,7 @@ let generateResponse = function(object, status=200) {
         {'Content-type': 'application/json'},
         JSON.stringify(object)
     ];
-}
+};
 
 
 describe('Model Manager queries', () => {
