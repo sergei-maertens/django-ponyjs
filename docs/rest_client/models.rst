@@ -137,7 +137,7 @@ be ``http://example.com/api/v1/pizzas/pizza/:id/``. Each ``:key`` is interpolate
 with the object itself, so a ``Pizza`` instance ``new Pizza({id: 10})`` would
 resolve to ``http://example.com/api/v1/pizzas/pizza/10/``.
 
-These auto-discovered endpoints can ofcourse be specified manually:
+These auto-discovered endpoints can of course be specified manually:
 
 .. code-block:: js
 
