@@ -9,7 +9,7 @@ Usage
 Retrieving data from the API
 ============================
 
-This process is similar to how Django works, but then ``Promisified`` to deal
+This process is similar to how Django works, but is then ``Promisified`` to deal
 with the async nature of HTTP requests.
 
 To retrieve all objects (possibly paginated) from your endpoint, you build a

@@ -8,7 +8,7 @@ import { Field } from './fields/fields';
 class Options {
   constructor(opts) {
     // TODO: add some validation
-    for (var key in opts) {
+    for (let key of Object.keys(opts)) {
       this[key] = opts[key];
     }
   }
@@ -20,7 +20,7 @@ class Options {
     };
 
     if (this.app_label) {
-      for (let key in defaults) {
+      for (let key of Object.keys(defaults)) {
         defaults[key] = `${this.app_label}/${defaults[key]}`;
       }
     }
@@ -44,8 +44,8 @@ class ModelState {
   get dirty() {
     let instance = this.instance;
 
-    for (let fieldName in instance.constructor._meta.fields) {
-      if ( this.original_values[fieldName] != instance[fieldName] ) {
+    for (let fieldName of Object.keys(instance.constructor._meta.fields)) {
+      if (this.original_values[fieldName] != instance[fieldName]) {
         return true;
       }
     }
@@ -56,14 +56,13 @@ class ModelState {
 
 
 class ModelBase {
-  constructor(data) {
+  constructor(data={}) {
 
     // set up the instance state
     this._state = data;
 
-    // set the properties
-    for (let key in data) {
-      this[key] = data[key];
+    for (let key of Object.keys(data)) {
+      this[key] = data[key]
     }
   }
 
@@ -77,7 +76,7 @@ class ModelBase {
   }
 
   _equals(other) {
-    for (let key in this) {
+    for (let key of Object.keys(this)) {
       if (this[key] != other[key]) {
         return false;
       }
@@ -119,7 +118,7 @@ class ModelBase {
 
 
 // Factory to create models more declaritively-ish
-let Model = function(name, attrs={}) {
+let Model = function(name, attrs = {}) {
   let fields = {},
       meta = attrs.Meta || {},
       managers = {};
@@ -139,12 +138,12 @@ let Model = function(name, attrs={}) {
     static Meta() {
       return meta;
     }
-  };
+  }
 
   _Model._meta.fields = fields;
   _Model._meta.setDefaultEndpoints(meta.endpoints);
 
-  for (name in managers) {
+  for (let name of Object.keys(managers)) {
     _Model[name] = managers[name];
   }
 
@@ -156,7 +155,7 @@ let Model = function(name, attrs={}) {
     }
   }
 
-  // _Model.name = name; overriden by Babel
+  // _Model.name = name; overridden by Babel
   return _Model;
 };
 
