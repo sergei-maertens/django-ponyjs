@@ -1,6 +1,5 @@
 'use strict';
 
-import $ from 'jquery';
 import Manager from './manager';
 import { Field } from './fields/fields';
 
@@ -8,9 +7,7 @@ import { Field } from './fields/fields';
 class Options {
   constructor(opts) {
     // TODO: add some validation
-    for (let key of Object.keys(opts)) {
-      this[key] = opts[key];
-    }
+    Object.assign(this, opts);
   }
 
   setDefaultEndpoints(endpoints={}) {
@@ -25,12 +22,12 @@ class Options {
       }
     }
 
-    this.endpoints = $.extend(true, defaults, endpoints);
+    this.endpoints = Object.assign(defaults, endpoints);
   }
 
   // merge new endpoints with existing
   setEndpoints(endpoints) {
-    this.endpoints = $.extend(true, this.endpoints, endpoints);
+    this.endpoints = Object.assign(this.endpoints, endpoints);
   }
 }
 
@@ -38,7 +35,7 @@ class Options {
 class ModelState {
   constructor(instance, data) {
     this.instance = instance;
-    this.original_values = $.extend(true, {}, data);
+    this.original_values = Object.assign({}, data);
   }
 
   get dirty() {
@@ -56,14 +53,12 @@ class ModelState {
 
 
 class ModelBase {
-  constructor(data={}) {
+  constructor(data) {
 
     // set up the instance state
     this._state = data;
 
-    for (let key of Object.keys(data)) {
-      this[key] = data[key]
-    }
+    Object.assign(this, data);
   }
 
   static Meta() {
@@ -143,9 +138,7 @@ let Model = function(name, attrs = {}) {
   _Model._meta.fields = fields;
   _Model._meta.setDefaultEndpoints(meta.endpoints);
 
-  for (let name of Object.keys(managers)) {
-    _Model[name] = managers[name];
-  }
+  Object.assign(_Model, managers);
 
   // also run contribute to class
   for (let key in attrs) {
