@@ -1,7 +1,5 @@
 'use strict';
 
-import $ from 'jquery';
-
 import { defaultClient, getClient } from '../api/client.js';
 import Paginator from './paginator.js';
 
@@ -33,7 +31,7 @@ export class QuerySet {
 
     __copy() {
         let copy = new this.constructor(this.model);
-        copy.filters = $.extend(true, {}, this.filters);
+        copy.filters = Object.assign({}, this.filters);
         copy.client = this.client;
         return copy;
     }
@@ -68,7 +66,7 @@ export class QuerySet {
     }
 
     filter(params) {
-        for (let key in params) {
+        for (let key of Object.keys(params)) {
             if (this.filters[key] !== undefined) {
                 // append, convert to list if necessary
                 if (!Array.isArray(this.filters[key])) {
@@ -104,7 +102,7 @@ export class QuerySet {
 
         // TODO: make this smarter
         let endpoint = this.model._meta.endpoints.detail;
-        for(let key in params) {
+        for(let key of Object.keys(params)) {
             let bit = `/:${key}/`;
             if (endpoint.includes(bit)) {
                 endpoint = endpoint.replace(bit, `/${params[key]}/`);
@@ -125,8 +123,7 @@ export class QuerySet {
         let endpoint = this.model._meta.endpoints.list;
         let request = this.client.createRequest(endpoint).asPost().withContent(params).send();
         return request.then(response => {
-            let instance = new this.model(response.content);
-            return instance;
+            return new this.model(response.content);
         }, errorResponse => {
             // validation error
             if (errorResponse.statusCode == 400) {
