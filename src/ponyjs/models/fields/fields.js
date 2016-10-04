@@ -1,18 +1,12 @@
 'use strict';
 
-import $ from 'jquery';
-
-
 class Field {
-    constructor (name, options) {
+    constructor (name, options={}) {
         this.type = null;
         this.model = null;
         this.verbose_name = name;
         let defaults = this.constructor.defaults();
-        options = $.extend(true, defaults, options || {});
-        for (let key in defaults) {
-            this[key] = options[key];
-        }
+        Object.assign(this, defaults, options);
     }
 
     static defaults () {
@@ -31,11 +25,12 @@ class Field {
 class StringField extends Field {
     static defaults () {
         let defaults = super.defaults();
-        return $.extend(true, defaults, {
+        return Object.assign(defaults, {
             max_length: null
         });
     }
 }
+
 StringField.type = String;
 
 

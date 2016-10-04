@@ -9,6 +9,11 @@ A single ``json``-file is expected in your ``settings.STATIC_ROOT``:
 ``conf/api.json``. This file is similar to ``settings.DATABASES``, where a
 minimum of one backend configuration is expected with the ``default`` key.
 
+.. note:: It is assumed that you have your backend API set up correctly and the
+   endpoints exist. For a sample configuration check `Django REST framework
+   <http://www.django-rest-framework.org/>`_ documentation.
+
+
 Example of ``myproject/myproject/static/conf/api.json``:
 
 .. code-block:: json

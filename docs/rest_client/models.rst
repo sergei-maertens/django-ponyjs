@@ -20,10 +20,12 @@ A model needs just enough information to be able to communicate with the API.
 
    import { Model } from 'ponyjs/models.js';
 
-   // provide the model name + declaration of fields/meta/managers
+   // Provide the model name + declaration of fields/meta/managers
+   // If `model_name` is omitted, lower case representation of the model's name is used
    class Pizza extends Model('Pizza', {
        Meta: {
-           app_label: 'pizzas'
+           app_label: 'pizzas',
+           model_name: 'pizza'
        }
    });
 
@@ -137,7 +139,7 @@ be ``http://example.com/api/v1/pizzas/pizza/:id/``. Each ``:key`` is interpolate
 with the object itself, so a ``Pizza`` instance ``new Pizza({id: 10})`` would
 resolve to ``http://example.com/api/v1/pizzas/pizza/10/``.
 
-These auto-discovered endpoints can ofcourse be specified manually:
+These auto-discovered endpoints can of course be specified manually:
 
 .. code-block:: js
 

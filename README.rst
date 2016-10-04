@@ -29,6 +29,28 @@ Installation & getting started
 Check the documentation at http://django-ponyjs.readthedocs.org/en/latest/.
 
 
+Contributing
+------------
+
+Install required packages by running
+
+.. code-block:: bash
+
+    npm install
+    jspm install
+
+Now the tests can be run with
+
+.. code-block:: bash
+
+    npm test
+
+or
+
+.. code-block:: bash
+
+    grunt karma:dev
+
 Credits
 -------
 
